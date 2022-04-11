@@ -10,6 +10,8 @@ export default function Nav() {
 
     const [state, setState] = useState({user: ""});
     const [points, setPoints] = useState({points: ""})
+    const [token, setToken] = useState({token: localStorage.getItem("token")})
+
 
     function GetUserPoints() {
         const dataPoints = {
@@ -33,9 +35,8 @@ export default function Nav() {
                 })
             });
     }
-    
-    React.useEffect(() => {
 
+    function decodeJWT() {
         if (localStorage.getItem("token")) {
             const data = {
                 jwt: localStorage.getItem("token")
@@ -61,7 +62,19 @@ export default function Nav() {
                     })
                 })
         }
-    }, [])
+    }
+
+    React.useEffect(() => {
+        decodeJWT();
+
+        window.addEventListener('storage', () => {
+            // When local storage changes, dump the list to
+            // the console.
+            //setToken({token: localStorage.getItem("token")})
+            decodeJWT();
+        });
+
+    }, [token.token])
 
     /*    React.useEffect(() => {
             if(state.user) {

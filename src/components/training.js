@@ -28,26 +28,28 @@ export default function Training() {
     };
 
     function decodeJWT() {
-        const data = {
-            jwt: localStorage.getItem("token")
-        }
+        if (localStorage.getItem("token")) {
+            const data = {
+                jwt: localStorage.getItem("token")
+            }
 
-        const requestOptions = {
-            method: "POST",
-            body: JSON.stringify(data),
-        };
+            const requestOptions = {
+                method: "POST",
+                body: JSON.stringify(data),
+            };
 
-        fetch(
-            "http://192.168.100.27/Licenta/models/DecodeJWT.php",
-            requestOptions
-        )
-            .then((response) => response.json())
-            .then((dates) => {
-                //this.props.setUser(dates.data.email);
-                setState({
-                    user: dates["JWT"]["data"]["email"]
+            fetch(
+                "http://192.168.100.27/Licenta/models/DecodeJWT.php",
+                requestOptions
+            )
+                .then((response) => response.json())
+                .then((dates) => {
+                    //this.props.setUser(dates.data.email);
+                    setState({
+                        user: dates["JWT"]["data"]["email"]
+                    })
                 })
-            })
+        }
     }
 
     function dataFunction() {
@@ -103,6 +105,7 @@ export default function Training() {
                 .then((response) => response.json())
                 .then((data) => {
                     localStorage.setItem('token', data.JWT);
+                    window.dispatchEvent(new Event("storage"));
                 })
         } else if (parameter === "decrement") {
             fetch(
@@ -112,6 +115,7 @@ export default function Training() {
                 .then((response) => response.json())
                 .then((data) => {
                     localStorage.setItem('token', data.JWT);
+                    window.dispatchEvent(new Event("storage"));
                 })
         }
 
@@ -159,10 +163,15 @@ export default function Training() {
 
 
     }
+    
+    function changePage(){
+        window.location.href = '/login'
+    }
 
     return (
         <div className="centerContent">
-            <div className="itemCenterContent">
+            {!localStorage.getItem("token") && changePage()}
+            {localStorage.getItem("token") && <div className="itemCenterContent">
                 <p> {questionData.question} </p>
                 <form onSubmit={handleSubmit}>
                     <FormControl>
@@ -201,7 +210,7 @@ export default function Training() {
                         </div>
                     </FormControl>
                 </form>
-            </div>
+            </div>}
         </div>
     )
 }
