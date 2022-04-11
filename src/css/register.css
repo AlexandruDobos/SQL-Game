@@ -1,0 +1,13 @@
+﻿.buttonRegister{
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+}
+
+.errorRegister{
+    background: #1C8EF9 !important;
+    color: white;
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+}

@@ -1,0 +1,25 @@
+﻿.centerContent{
+    display: flex;
+    justify-content: center;
+}
+.itemCenterContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttonSubmit{
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+}
+
+.errorSubmit{
+    background: #1C8EF9 !important;
+    color: white;
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+}
+
