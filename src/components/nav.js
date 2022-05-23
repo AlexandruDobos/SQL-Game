@@ -1,17 +1,29 @@
 ﻿import React, {useState} from 'react'
 import {Link} from "react-router-dom"
+import SettingsIcon from '@mui/icons-material/Settings';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import MailIcon from '@mui/icons-material/Mail';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import LogoutIcon from '@mui/icons-material/Logout';
+import FireplaceIcon from '@mui/icons-material/Fireplace';
+import AlarmOnIcon from '@mui/icons-material/AlarmOn';
+import HomeIcon from '@mui/icons-material/Home';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import '../css/nav.css'
-//"http://192.168.100.27/Licenta/models/DecodeJWT.php",
-//"http://192.168.1.7/Licenta/models/DecodeJWT.php",
+import IPv4 from '../index';
+import {Badge} from "@mui/icons-material";
+
 
 export default function Nav() {
 
     const pages = ['Login', 'Sign in'];
 
+    const [isAdmin, setIsAdmin] = useState({isAdmin: ""})
     const [state, setState] = useState({user: ""});
+    const [username, setUsername] = useState({username: ""})
     const [points, setPoints] = useState({points: ""})
     const [token, setToken] = useState({token: localStorage.getItem("token")})
-
+    const [challenges, setChallenges] = useState({value: 0})
 
     function GetUserPoints() {
         const dataPoints = {
@@ -22,9 +34,9 @@ export default function Nav() {
             method: "POST",
             body: JSON.stringify(dataPoints)
         };
-
+        let input = IPv4 + "/Licenta/models/ExtractUserPoints.php"
         fetch(
-            "http://192.168.100.27/Licenta/models/ExtractUserPoints.php",
+            input,
             requestOptionsPoints
         )
             .then((response) => response.json())
@@ -46,9 +58,9 @@ export default function Nav() {
                 method: "POST",
                 body: JSON.stringify(data)
             };
-
+            let input = IPv4 + "/Licenta/models/DecodeJWT.php"
             fetch(
-                "http://192.168.100.27/Licenta/models/DecodeJWT.php",
+                input,
                 requestOptions
             )
                 .then((response) => response.json())
@@ -60,13 +72,40 @@ export default function Nav() {
                     setPoints({
                         points: dates["JWT"]["data"]["points"]
                     })
+                    setIsAdmin({
+                        isAdmin: dates["JWT"]["data"]["is_admin"]
+                    })
+                    setUsername({
+                        username: dates["JWT"]["data"]["username"]
+                    })
+                    //GetNumberOfChallenges(dates["JWT"]["data"]["username"]);
                 })
         }
     }
-
+    
+    function GetNumberOfChallenges(username){
+        const data = {
+            username: username
+        }
+        const requestOptions = {
+            method: "POST",
+            body: JSON.stringify(data)
+        };
+        
+        let input = IPv4 + "/Licenta/models/GetNumberOfChallenges.php"
+        fetch(
+            input,
+            requestOptions
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                if(data.message !== "Actiune esuata!" && data.message !== "Actiune esuata! Nu sunt date suficiente!") {
+                    setChallenges({value: data.message})
+                }
+            })
+    }
     React.useEffect(() => {
         decodeJWT();
-
         window.addEventListener('storage', () => {
             // When local storage changes, dump the list to
             // the console.
@@ -89,13 +128,48 @@ export default function Nav() {
     };
     let buttons;
 
-    if (state.user) {
+    if (state.user && isAdmin.isAdmin==="1") {
+        //console.log(state.user);
+        //console.log(points.points)
+        console.log(isAdmin.isAdmin)
+        buttons = (
+            <ul className="navigation">
+                <li id="element">
+                    <MonetizationOnIcon/>Points: {points.points}
+                </li>
+                <li>
+                    <Link id="element" to={'/challenges'}><MailIcon /></Link>
+                </li>
+                <li>
+                    <Link id="element" to={'/addquestion'}><AddCircleOutlineIcon/></Link>
+                </li>
+                <li>
+                    <Link id="element" to={'/settings'}><SettingsIcon/></Link>
+                </li>
+                <li>
+                    <Link id="element" to={'/admin'}><AdminPanelSettingsIcon/></Link>
+                </li>
+                <li>
+                    <Link id="element" to={'/'} onClick={handleLogout}>Logout<LogoutIcon/></Link>
+                </li>
+            </ul>
+        )
+    } else if (state.user) {
         //console.log(state.user);
         //console.log(points.points)
         buttons = (
             <ul className="navigation">
                 <li id="element">
                     Points: {points.points}
+                </li>
+                <li>
+                    <Link id="element" to={'/challenges'}><MailIcon /></Link>
+                </li>
+                <li>
+                    <Link id="element" to={'/addquestion'}><AddCircleOutlineIcon/></Link>
+                </li>
+                <li>
+                    <Link id="element" to={'/settings'}><SettingsIcon/></Link>
                 </li>
                 <li>
                     <Link id="element" to={'/'} onClick={handleLogout}>Logout</Link>
@@ -118,8 +192,9 @@ export default function Nav() {
     return (
         <div className="cont">
             <nav className="navigation">
-                <Link id="element" to={'/'}>Home</Link>
-                {state.user && <Link id="element" to={'/training'}>Exersează</Link>}
+                <Link id="element" to={'/'}>Home <HomeIcon/></Link>
+                {state.user && <Link id="element" to={'/training'}>Exersează <AlarmOnIcon/></Link>}
+                {state.user && <Link id="element" to={'/game'}>Joacă <FireplaceIcon/></Link>}
                 {buttons}
             </nav>
         </div>

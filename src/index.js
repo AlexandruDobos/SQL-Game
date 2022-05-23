@@ -5,6 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from "axios";
 
+//http://192.168.100.27 Iasi
+//http://192.168.1.7 Tara
+
+let hotspot = "http://172.20.10.14"
+let iasi = "http://192.168.100.27"
+let tara = "http://192.168.1.2"
+
+let IPv4;
+export default IPv4 = tara;
+
 axios.defaults.baseURL = 'http://127.0.0.1:8000/';
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 

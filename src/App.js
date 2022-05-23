@@ -9,8 +9,11 @@ import Login from '../src/components/login'
 import Register from '../src/components/register'
 import Training from '../src/components/training'
 import {Forgot} from "./components/forgot";
-
-
+import Settings from "./components/settings";
+import Admin from "./components/admin";
+import Game from "./components/game"
+import Challenges from "./components/challenges"
+import AddQuestion from "./components/addquestion"
 export default function App() {
 
     return (
@@ -26,6 +29,11 @@ export default function App() {
                             <Route exact path="/register" component={Register}/>
                             <Route exact path="/forgot" component={Forgot}/>
                             <Route exact path="/training" component={() => <Training/>}/>
+                            <Route exact path="/settings" component={() => <Settings/>}/>
+                            <Route exact path="/admin" component={() => <Admin/>}/>
+                            <Route exact path="/game" component={() => <Game/>}/>
+                            <Route exact path="/challenges" component={() => <Challenges/>}/>
+                            <Route exact path="/addquestion" component={() => <AddQuestion/>}/>
                         </Switch>
                     </div>
                 </div>

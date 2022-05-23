@@ -1,8 +1,7 @@
 ﻿import React, {useState} from 'react';
 import axios from 'axios';
 import {Redirect} from "react-router-dom";
-//"http://192.168.100.27/Licenta/models/AddUser.php",
-//"http://192.168.1.7/Licenta/models/AddUser.php",
+import IPv4 from '../index';
 
 export default function Register() {
 
@@ -11,6 +10,7 @@ export default function Register() {
     const data = {
         first_name: "",
         last_name: "",
+        username: "",
         email: "",
         password: "",
         password_confirm: ""
@@ -20,6 +20,7 @@ export default function Register() {
         console.log(data);
         if (data.first_name &&
             data.last_name &&
+            data.username &&
             data.email &&
             data.password &&
             data.password_confirm) {
@@ -30,16 +31,34 @@ export default function Register() {
                     method: "POST",
                     body: JSON.stringify(data),
                 };
-
+                let input = IPv4 + "/Licenta/models/AddUser.php"
                 fetch(
-                    "http://192.168.100.27/Licenta/models/AddUser.php",
+                    input,
                     requestOptions
                 )
                     .then((response) => response.json())
                     .then((data) => {
                         console.log(data)
-                        if (data.message === "Email taken. Choose another one") {
+                        if (data.message === "Username taken. Choose another one") {
+                            setErrorData({message: "Username existent deja."});
+                            data.first_name = "";
+                            data.last_name = "";
+                            data.email = "";
+                            data.password = "";
+                            data.password_confirm = "";
+                            Array.from(document.querySelectorAll("input")).forEach(
+                                input => (input.value = "")
+                            );
+                        } else if (data.message === "Email taken. Choose another one") {
                             setErrorData({message: "Email existent deja."});
+                            data.first_name = "";
+                            data.last_name = "";
+                            data.email = "";
+                            data.password = "";
+                            data.password_confirm = "";
+                            Array.from(document.querySelectorAll("input")).forEach(
+                                input => (input.value = "")
+                            );
                         } else {
                             window.location.href = '/login';
                         }
@@ -63,6 +82,7 @@ export default function Register() {
             setErrorData({message: "Trebuiesc completate toate câmpurile."})
             data.first_name = "";
             data.last_name = "";
+            data.username = "";
             data.email = "";
             data.password = "";
             data.password_confirm = "";
@@ -87,6 +107,12 @@ export default function Register() {
                 <label>Last Name</label>
                 <input type="text" className="form-control" placeholder="Last Name"
                        onChange={e => data.last_name = e.target.value}/>
+            </div>
+
+            <div className="form-group">
+                <label>Username</label>
+                <input type="text" className="form-control" placeholder="Username"
+                       onChange={e => data.username = e.target.value}/>
             </div>
 
             <div className="form-group">

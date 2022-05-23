@@ -2,7 +2,7 @@
 import '../css/login.css'
 //"http://192.168.100.27/Licenta/models/LoginUser.php",
 //"http://192.168.1.7/Licenta/models/LoginUser.php",
-
+import IPv4 from '../index';
 export default function Login() {
 
     const [state, setState] = useState({loggedIn: false});
@@ -21,9 +21,9 @@ export default function Login() {
                 method: "POST",
                 body: JSON.stringify(data),
             };
-
+            let input = IPv4 + "/Licenta/models/LoginUser.php"
             fetch(
-                "http://192.168.100.27/Licenta/models/LoginUser.php",
+                input,
                 requestOptions
             )
                 .then((response) => response.json())
@@ -81,7 +81,7 @@ export default function Login() {
             </div>
 
             <div className="buttonLogin">
-                <button className="btn btn-primary btn-block">Login</button>
+                <button className="btn btn-primary btn-block">Submit</button>
             </div>
             {/*       <p className="forgot-password text-right">
                 <Link to={'/forgot'}>Forgot password?</Link>

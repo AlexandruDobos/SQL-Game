@@ -23,3 +23,43 @@
     margin-top: 5%;
 }
 
+.topContent{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+h2{
+    text-align: center;
+    font-size: 30px;
+}
+
+h3{
+    font-size: 17px;
+    text-align: center;
+    padding: 20px 0;
+    color: red;
+}
+
+.buttonPlay{
+    display: flex;
+    justify-content: center;
+}
+
+.justified{
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+p{
+    margin-top: 15px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.button{
+    margin-bottom: 10px;
+}
+
+

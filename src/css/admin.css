@@ -1,0 +1,67 @@
+table {
+    border: 2px solid #167bff;
+    width: 800px;
+    height: 200px;
+}
+
+tr{
+    text-align: center;
+}
+
+th {
+    border-bottom: 1px solid #167bff;
+}
+
+td {
+    text-align: center;
+    border: 1px solid #167bff;
+}
+
+#h2Title{
+    text-align: center;
+    font-size: 48px;
+    color: white;
+    background-color: #1C8EF9;
+}
+h1{
+    text-align: center;
+}
+
+.btnDelete{
+    color: white;
+    background-color: #ff0000;
+}
+
+.btnDelete:hover{
+    color: white;
+    background-color: #ff0000;
+}
+
+.formulary{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    align-content: center;
+}
+
+#formularyChild{
+    flex-basis: auto;
+    width: inherit;
+}
+
+.addAdministrator{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#addAdministratorChild{
+    flex-basis: auto;
+    width: inherit;
+}
+
+#standard-required{
+    display: flex;
+    align-content: center;
+}
