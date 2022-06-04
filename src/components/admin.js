@@ -4,9 +4,10 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import '../css/admin.css'
 import IPv4 from '../index.js'
-import {FormControl, FormControlLabel, Radio, RadioGroup, TextareaAutosize} from "@mui/material";
+import {FormControl, FormControlLabel, Paper, Popper, Radio, RadioGroup, TextareaAutosize} from "@mui/material";
 import {Email} from "@mui/icons-material";
 import {DataGrid} from '@mui/x-data-grid';
+import PropTypes from "prop-types";
 
 export default function Admin() {
 
@@ -30,6 +31,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'question',
@@ -38,6 +40,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'difficulty',
@@ -46,6 +49,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'var1',
@@ -54,6 +58,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'var2',
@@ -62,6 +67,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'var3',
@@ -70,6 +76,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'var4',
@@ -78,6 +85,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'varcorrect',
@@ -86,6 +94,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'user',
@@ -94,6 +103,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'email',
@@ -102,6 +112,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'acceptQuestion',
@@ -111,6 +122,7 @@ export default function Admin() {
             cellClassName: 'super-app-theme--cell-accept',
             width: 160,
             valueGetter: () => 'ACCEPT',
+            renderCell: renderCellExpand,
         },
         {
             field: 'deleteQuestion',
@@ -120,6 +132,7 @@ export default function Admin() {
             cellClassName: 'super-app-theme--cell-delete',
             width: 160,
             valueGetter: () => 'DELETE',
+            renderCell: renderCellExpand,
         },
     ];
     const [pendingAdministratorRows, setPendingAdministratorRows] = useState([])
@@ -131,6 +144,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'username',
@@ -139,6 +153,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'email',
@@ -147,6 +162,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'who_proposed_username',
@@ -155,6 +171,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'who_proposed_email',
@@ -163,6 +180,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'specifications',
@@ -171,6 +189,7 @@ export default function Admin() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'acceptRequestAdministrator',
@@ -180,6 +199,7 @@ export default function Admin() {
             cellClassName: 'super-app-theme--cell-accept',
             width: 160,
             valueGetter: () => 'ACCEPT',
+            renderCell: renderCellExpand,
         },
         {
             field: 'deleteRequestAdministrator',
@@ -189,8 +209,186 @@ export default function Admin() {
             cellClassName: 'super-app-theme--cell-delete',
             width: 160,
             valueGetter: () => 'DELETE',
+            renderCell: renderCellExpand,
         },
     ]
+    
+    const [pendingResponsesRows, setPendingResponsesRows] = useState([]);
+    let pendingResponsesColumns = [
+        {
+            field: 'id',
+            headerName: 'ID',
+            description: 'Ce id are răspunsul greșit',
+            sortable: false,
+            editable: false,
+            width: 160,
+            renderCell: renderCellExpand,
+        },
+        {
+            field: 'question_id',
+            headerName: 'ID-ul întrebării',
+            description: 'Ce id are întrebarea la care s-a acordat răspunsul',
+            sortable: false,
+            editable: false,
+            width: 160,
+            renderCell: renderCellExpand,
+        },
+        {
+            field: 'question',
+            headerName: 'Întrebarea',
+            description: 'Întrebarea la care s-a acordat răspunsul',
+            sortable: false,
+            editable: false,
+            width: 160,
+            renderCell: renderCellExpand,
+        },
+        {
+            field: 'response',
+            headerName: 'Răspuns greșit',
+            description: 'Răspunsul greșit al utilizatorului',
+            sortable: false,
+            editable: false,
+            width: 160,
+            renderCell: renderCellExpand,
+        },
+        {
+            field: 'difficulty',
+            headerName: 'Dificultate întrebare',
+            description: 'Ce dificultate are întrebarea pentru care este posibil ca acest răspuns să fie acceptat',
+            sortable: false,
+            editable: false,
+            width: 160,
+            renderCell: renderCellExpand,
+        },
+        {
+            field: 'acceptPendingResponse',
+            headerName: 'Accepta răspuns',
+            description: 'Acceptă acest răspuns ca fiind unul greșit pentru întrebare.',
+            sortable: false,
+            cellClassName: 'super-app-theme--cell-accept',
+            width: 160,
+            valueGetter: () => 'Acceptă',
+            renderCell: renderCellExpand,
+        },
+        {
+            field: 'deletePendingResponse',
+            headerName: 'Respinge răspuns',
+            description: 'Șterge acest răspuns.',
+            sortable: false,
+            cellClassName: 'super-app-theme--cell-delete',
+            width: 160,
+            valueGetter: () => 'Respinge',
+            renderCell: renderCellExpand,
+        },
+    ]
+
+    function isOverflown(element) {
+        return (
+            element.scrollHeight > element.clientHeight ||
+            element.scrollWidth > element.clientWidth
+        );
+    }
+
+    const GridCellExpand = React.memo(function GridCellExpand(props) {
+        const { width, value } = props;
+        const wrapper = React.useRef(null);
+        const cellDiv = React.useRef(null);
+        const cellValue = React.useRef(null);
+        const [anchorEl, setAnchorEl] = React.useState(null);
+        const [showFullCell, setShowFullCell] = React.useState(false);
+        const [showPopper, setShowPopper] = React.useState(false);
+
+        const handleMouseEnter = () => {
+            const isCurrentlyOverflown = isOverflown(cellValue.current);
+            setShowPopper(isCurrentlyOverflown);
+            setAnchorEl(cellDiv.current);
+            setShowFullCell(true);
+        };
+
+        const handleMouseLeave = () => {
+            setShowFullCell(false);
+        };
+
+        React.useEffect(() => {
+            if (!showFullCell) {
+                return undefined;
+            }
+
+            function handleKeyDown(nativeEvent) {
+                // IE11, Edge (prior to using Bink?) use 'Esc'
+                if (nativeEvent.key === 'Escape' || nativeEvent.key === 'Esc') {
+                    setShowFullCell(false);
+                }
+            }
+
+            document.addEventListener('keydown', handleKeyDown);
+
+            return () => {
+                document.removeEventListener('keydown', handleKeyDown);
+            };
+        }, [setShowFullCell, showFullCell]);
+
+        return (
+            <Box
+                ref={wrapper}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                sx={{
+                    alignItems: 'center',
+                    lineHeight: '24px',
+                    width: 1,
+                    height: 1,
+                    position: 'relative',
+                    display: 'flex',
+                }}
+            >
+                <Box
+                    ref={cellDiv}
+                    sx={{
+                        height: 1,
+                        width,
+                        display: 'block',
+                        position: 'absolute',
+                        top: 0,
+                    }}
+                />
+                <Box
+                    ref={cellValue}
+                    sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                >
+                    {value}
+                </Box>
+                {showPopper && (
+                    <Popper
+                        open={showFullCell && anchorEl !== null}
+                        anchorEl={anchorEl}
+                        style={{ width, marginLeft: -17 }}
+                    >
+                        <Paper
+                            elevation={1}
+                            style={{ minHeight: wrapper.current.offsetHeight - 3 }}
+                        >
+                            <Typography variant="body2" style={{ padding: 8 }}>
+                                {value}
+                            </Typography>
+                        </Paper>
+                    </Popper>
+                )}
+            </Box>
+        );
+    });
+
+    GridCellExpand.propTypes = {
+        value: PropTypes.string.isRequired,
+        width: PropTypes.number.isRequired,
+    };
+
+    function renderCellExpand(params) {
+        return (
+            <GridCellExpand value={params.value || ''} width={params.colDef.computedWidth} />
+        );
+    }
+    
     function getData() {
         const data = {
             jwt: localStorage.getItem("details")
@@ -242,7 +440,25 @@ export default function Admin() {
                 })
             })
     }
-
+    
+    function GetPendingResponses(){
+        const requestOptions = {
+            method: "GET"
+        };
+        let input = IPv4 + "/Licenta/models/SelectPendingResponses.php"
+        fetch(
+            input,
+            requestOptions
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                setPendingResponsesRows(data.message);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    
     function getPendingAdministratorRows(){
         const requestOptions = {
             method: "GET"
@@ -266,6 +482,7 @@ export default function Admin() {
         getData();
         getUserDetails();
         getPendingAdministratorRows();
+        GetPendingResponses();
         const requestOptions = {
             method: "GET"
         };
@@ -510,7 +727,50 @@ export default function Admin() {
                 console.log(error);
             });
     }
-
+    
+    function AcceptPendingResponse(id){
+        const data = {
+            pending_response_id: id,
+        }
+        const requestOptions = {
+            method: "POST",
+            body: JSON.stringify(data)
+        }
+        let input = IPv4 + "/Licenta/models/AcceptPendingResponse.php"
+        fetch(
+            input,
+            requestOptions
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    
+    function DeletePendingResponse(id){
+        const data = {
+            pending_response_id: id,
+        }
+        const requestOptions = {
+            method: "POST",
+            body: JSON.stringify(data)
+        }
+        let input = IPv4 + "/Licenta/models/DeletePendingResponse.php"
+        fetch(
+            input,
+            requestOptions
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
     const handleOnCellClick = (params) => {
         if (params.field === 'acceptQuestion') {
             rows.map((item) => {
@@ -547,6 +807,21 @@ export default function Admin() {
         //console.log(params.id, params.field, params.value);
     };
 
+    const handleOnCellClickResponses = (params) => {
+        if(params.field === 'acceptPendingResponse'){
+            pendingAdministratorRows.map((item) => {
+                if(item["id"] === params.id){
+                    AcceptPendingResponse(params.id);
+                    console.log(params.id);
+                }
+            })
+
+        }else {
+            if (params.field === 'deletePendingResponse') {
+                DeletePendingResponse(params.id);
+            }
+        }
+    }
     return (
         <div>
             {userGrade.grade === "administrator" && <h2 id="h2Title">Admin page</h2>}
@@ -644,7 +919,7 @@ export default function Admin() {
             }
 
             <div className="container">
-                <h1>Pending Training Questions</h1>
+                <h1>Întrebări în așteptare</h1>
                 <div style={{height: 400, width: '100%'}}>
                     <Box
                         sx={{
@@ -704,13 +979,37 @@ export default function Admin() {
                 </div>
             </div>}
 
-            {/*            <form onSubmit={handleSubmit}>
-                    <div className="buttonSubmit">
-                            <button className="btn btn-primary btn-block">Submit
-                            </button>
-                    </div>
-                
-            </form>*/}
+            <div className="container">
+                <h1>Răspunsuri greșite în așteptare</h1>
+                <div style={{height: 400, width: '100%'}}>
+                    <Box
+                        sx={{
+                            height: 300,
+                            width: 1,
+                            '& .super-app-theme--cell-accept': {
+                                backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                                color: '#1a3e72',
+                                fontWeight: '600',
+                            },
+                            '& .super-app-theme--cell-delete': {
+                                backgroundColor: '#d47483',
+                                color: '#1a3e72',
+                                fontWeight: '600',
+                            },
+                        }}
+                    >
+                        <DataGrid
+                            rows={pendingResponsesRows}
+                            columns={pendingResponsesColumns}
+                            pageSize={5}
+                            rowsPerPageOptions={[5]}
+                            disableSelectionOnClick
+                            onCellClick={handleOnCellClickResponses}
+                        />
+                    </Box>
+                </div>
+            </div>
+            
         </div>
     )
 }

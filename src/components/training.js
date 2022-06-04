@@ -4,7 +4,7 @@ import {
     FormControl,
     FormControlLabel,
     FormLabel, Grid, InputLabel, MenuItem,
-    Paper,
+    Paper, Popper,
     Radio,
     RadioGroup, Select, Slider,
     Switch,
@@ -21,16 +21,26 @@ import Typography from "@mui/material/Typography";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import {Input} from "@mui/icons-material";
 import TextField from "@mui/material/TextField";
-import diagram from "../images/studentiDiagram.svg";
+import diagram from "../images/structura_tabele.svg";
+import PropTypes from "prop-types";
 
 export default function Training() {
 
     const [state, setState] = useState({email: ""});
     const [username, setUsername] = useState({username: ""})
     const [points, setPoints] = useState({points: ""})
-    let easyPoints = 5;
-    let mediumPoints = 10;
-    let hardPoints = 20;
+    let easyPoints = 25;
+    let easyHelpQuestionPoints = 15;
+    let easyAddFedbackPoints = 5;
+    let easyShowFedbackPoints = 5;
+    let mediumPoints = 50;
+    let mediumHelpQuestionPoints = 30;
+    let mediumAddFedbackPoints = 10;
+    let mediumShowFedbackPoints = 10;
+    let hardPoints = 150;
+    let hardHelpQuestionPoints = 90;
+    let hardAddFedbackPoints = 30;
+    let hardShowFedbackPoints = 30;
     const [questionData, setQuestionData] = useState({
         questionId: "",
         question: "",
@@ -47,7 +57,7 @@ export default function Training() {
     const [selectedAnswer, setSelectedAnswer] = useState({answer: ""});
     const [checked, setChecked] = useState({var_1: false, var_2: false, var_3: false, var_4: false});
     const [typeOfQuestionFromDatabase, setTypeOfQuestionFromDatabase] = useState({value: ""});
-    const [easy, setEasy] = React.useState({value: "true"});
+    const [easy, setEasy] = React.useState({value: "false"});
     const [medium, setMedium] = React.useState({value: "false"});
     const [hard, setHard] = React.useState({value: "false"});
     const [hardQuestionResponse, setHardQuestionsResponse] = React.useState({value: ""})
@@ -73,6 +83,7 @@ export default function Training() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'user_who_send',
@@ -81,6 +92,7 @@ export default function Training() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'feedback',
@@ -89,16 +101,122 @@ export default function Training() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         }];
 
+    function isOverflown(element) {
+        return (
+            element.scrollHeight > element.clientHeight ||
+            element.scrollWidth > element.clientWidth
+        );
+    }
 
-    const [seconds, setSeconds] = useState({value: ""});
+    const GridCellExpand = React.memo(function GridCellExpand(props) {
+        const {width, value} = props;
+        const wrapper = React.useRef(null);
+        const cellDiv = React.useRef(null);
+        const cellValue = React.useRef(null);
+        const [anchorEl, setAnchorEl] = React.useState(null);
+        const [showFullCell, setShowFullCell] = React.useState(false);
+        const [showPopper, setShowPopper] = React.useState(false);
+
+        const handleMouseEnter = () => {
+            const isCurrentlyOverflown = isOverflown(cellValue.current);
+            setShowPopper(isCurrentlyOverflown);
+            setAnchorEl(cellDiv.current);
+            setShowFullCell(true);
+        };
+
+        const handleMouseLeave = () => {
+            setShowFullCell(false);
+        };
+
+        React.useEffect(() => {
+            if (!showFullCell) {
+                return undefined;
+            }
+
+            function handleKeyDown(nativeEvent) {
+                // IE11, Edge (prior to using Bink?) use 'Esc'
+                if (nativeEvent.key === 'Escape' || nativeEvent.key === 'Esc') {
+                    setShowFullCell(false);
+                }
+            }
+
+            document.addEventListener('keydown', handleKeyDown);
+
+            return () => {
+                document.removeEventListener('keydown', handleKeyDown);
+            };
+        }, [setShowFullCell, showFullCell]);
+
+        return (
+            <Box
+                ref={wrapper}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                sx={{
+                    alignItems: 'center',
+                    lineHeight: '24px',
+                    width: 1,
+                    height: 1,
+                    position: 'relative',
+                    display: 'flex',
+                }}
+            >
+                <Box
+                    ref={cellDiv}
+                    sx={{
+                        height: 1,
+                        width,
+                        display: 'block',
+                        position: 'absolute',
+                        top: 0,
+                    }}
+                />
+                <Box
+                    ref={cellValue}
+                    sx={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
+                >
+                    {value}
+                </Box>
+                {showPopper && (
+                    <Popper
+                        open={showFullCell && anchorEl !== null}
+                        anchorEl={anchorEl}
+                        style={{width, marginLeft: -17}}
+                    >
+                        <Paper
+                            elevation={1}
+                            style={{minHeight: wrapper.current.offsetHeight - 3}}
+                        >
+                            <Typography variant="body2" style={{padding: 8}}>
+                                {value}
+                            </Typography>
+                        </Paper>
+                    </Popper>
+                )}
+            </Box>
+        );
+    });
+
+    GridCellExpand.propTypes = {
+        value: PropTypes.string.isRequired,
+        width: PropTypes.number.isRequired,
+    };
+
+    function renderCellExpand(params) {
+        return (
+            <GridCellExpand value={params.value || ''} width={params.colDef.computedWidth}/>
+        );
+    }
+
+
+    const [seconds, setSeconds] = useState(5);
     const [expiredTime, setIsExpiredTime] = useState({value: "false"})
-    const [viewSeconds, setViewSeconds] = useState({value: ""})
-    const [flag, setFlag] = useState({value: "false"})
 
     const [isDisplayImage, setIsDisplayImage] = useState({value: "false"})
-    const [textForImageButton, setTextForImageButton] = useState({value: "Afișează diagrama tabelei!"})
+    const [textForImageButton, setTextForImageButton] = useState({value: "Afișează diagrama bazei de date!"})
     const [isImageCreate, setIsImageCreate] = useState({value: "false"});
 
     const [isHelpButtonPressed, setIsHelpButtonPressed] = useState({value: "false"})
@@ -110,7 +228,7 @@ export default function Training() {
     })
     const [stringForHardQuestionHelp, setStringForHardQuestionHelp] = useState({value: ""})
     const [errorMessageForHelpQuestion, setErrorMessageForHelpQuestion] = useState({message: ""})
-
+    const [isDecrementPoints, setIsDecrementPoints] = useState(false);
     const handleSetStake = (event) => {
         setStake(event.target.value);
     };
@@ -171,6 +289,10 @@ export default function Training() {
     }
 
     function selectQueries() {
+        setIsDecrementPoints(false);
+        setIsExpiredTime({value: "false"})
+        setSubmitForm({value: "false"});
+        setErrorData({message: ""})
         setStringForHardQuestionHelp({value: ""});
         setDisableFormControlForHelp({var1: false, var2: false, var3: false, var4: false})
         setErrorMessageForHelpQuestion({message: ""})
@@ -206,6 +328,7 @@ export default function Training() {
             .then((response) => response.json())
             .then((data) => {
                 if (data.difficulty === "hard") {
+                    setSeconds(120);
                     let correctAnswer = data.correct_answer.split(" ");
                     let helpText = "";
                     for (let index = 0; index < correctAnswer.length; index++) {
@@ -216,8 +339,14 @@ export default function Training() {
                         }
                     }
                 }
-                console.log(data.difficulty)
-                console.log(data.correct_answer)
+                if (data.difficulty === "medium") {
+                    setSeconds(45);
+                }
+                if (data.difficulty === "easy") {
+                    setSeconds(30);
+                }
+                //console.log(data.difficulty)
+                //console.log(data.correct_answer)
                 SelectFeedbackQuestion(data.questionId)
                 setTypeOfQuestionFromDatabase({value: data.difficulty})
                 let x = Math.floor(Math.random() * 4) + 1;
@@ -316,7 +445,7 @@ export default function Training() {
     }
 
     function countReplyForQuestion() {
-        console.log(questionData.questionId);
+        //console.log(questionData.questionId);
         const data = {
             question_id: questionData.questionId
         }
@@ -332,7 +461,7 @@ export default function Training() {
             .then((response) => response.json())
             .then((data) => {
                 if (data.message === "Actiune reusita!") {
-                    console.log("succes!");
+                    //console.log("succes!");
                 } else {
                     console.log("fail!");
                 }
@@ -341,9 +470,15 @@ export default function Training() {
 
     React.useEffect(() => {
         decodeJWT();
-        selectQueries();
-    }, [isPlayButtonPressed.value]);
+        window.addEventListener('storage', () => {
+            // When local storage changes, dump the list to
+            // the console.
+            //setToken({token: localStorage.getItem("token")})
+            decodeJWT();
+        });
+        //selectQueries();
 
+    }, [localStorage.getItem("token")]);
 
     const handleChange = e => {
         e.preventDefault();
@@ -401,11 +536,31 @@ export default function Training() {
                     if (dates.message === "Raspuns corect!") {
                         setSubmitMessage({message: "Raspuns corect, ai primit " + hardPoints + " puncte!"})
                         changePoints("add", hardPoints);
-                        //changePoints("add");
                     } else {
                         if (dates.message === "Raspuns gresit!") {
                             setSubmitMessage({message: "Raspuns gresit, ai pierdut " + hardPoints + " puncte!"})
                             changePoints("decrement", hardPoints);
+
+                            const data = {
+                                correct_answer: questionData.correct_answer,
+                                user_response: userResponse,
+                                question_id_from_training_queries: questionData.questionId
+                            };
+
+                            const requestOptions = {
+                                method: "POST",
+                                body: JSON.stringify(data)
+                            };
+
+                            let input = IPv4 + "/Licenta/models/AddResponseToPendingResponses.php"
+                            fetch(
+                                input,
+                                requestOptions
+                            )
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    console.log(data.message);
+                                })
                         }
                     }
                 })
@@ -449,8 +604,79 @@ export default function Training() {
     const handleNextButton = e => {
         setHardQuestionsResponse({value: ""})
         e.preventDefault();
-        selectQueries();
+        if (easy.value === "true" || medium.value === "true" || hard.value === "true") {
+            if (easy.value === "true") {
+                console.log(points.points);
+                if (points.points < easyPoints) {
+                    setIsPlayButtonPressed({value: "false"})
+                    setEasy({value: "false"})
+                    setMedium({value: "false"})
+                    setHard({value: "false"})
+                    setErrorData({message: "Nu ai destule puncte pentru a te antrena cu întrebări easy."});
+                } else {
+                    selectQueries();
+                }
+            }
+            if (medium.value === "true") {
+                console.log(points.points);
+                if (points.points < mediumPoints) {
+                    setIsPlayButtonPressed({value: "false"})
+                    setEasy({value: "false"})
+                    setMedium({value: "false"})
+                    setHard({value: "false"})
+                    setErrorData({message: "Nu ai destule puncte pentru a te antrena cu întrebări medium."});
+                } else {
+                    selectQueries();
+                }
+            }
+            if (hard.value === "true") {
+                console.log(points.points);
+                if (points.points < hardPoints) {
+                    setIsPlayButtonPressed({value: "false"})
+                    setEasy({value: "false"})
+                    setMedium({value: "false"})
+                    setHard({value: "false"})
+                    setErrorData({message: "Nu ai destule puncte pentru a te antrena cu întrebări hard."});
+                } else {
+                    selectQueries();
+                }
+            }
+        }
     }
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            setSeconds((s) => s - 1);
+            if (seconds === 1) {
+                setIsExpiredTime({value: "true"});
+                setSubmitForm({value: "true"});
+                if (typeOfQuestionFromDatabase.value === "easy") {
+                    //setSubmitMessage({message: "Timpul a expirat, ai pierdut " + easyPoints + " puncte!"})
+                    if (isDecrementPoints === false) {
+                            changePoints("decrement", easyPoints);
+                            countReplyForQuestion();
+                            setIsDecrementPoints(true);
+                    }
+                } else if (typeOfQuestionFromDatabase.value === "medium") {
+                    //setSubmitMessage({message: "Timpul a expirat, ai pierdut " + mediumPoints + " puncte!"})
+                    if (isDecrementPoints === false) {
+                            changePoints("decrement", mediumPoints);
+                            countReplyForQuestion();
+                            setIsDecrementPoints(true);
+                    }
+                } else if (typeOfQuestionFromDatabase.value === "hard") {
+                    //setSubmitMessage({message: "Timpul a expirat, ai pierdut " + hardPoints + " puncte!"})
+                    if (isDecrementPoints === false) {
+                            changePoints("decrement", hardPoints);
+                            countReplyForQuestion();
+                            setIsDecrementPoints(true);
+                    }
+                }
+                clearInterval(interval);
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [seconds]);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -464,6 +690,7 @@ export default function Training() {
                 setSubmitMessage({message: "Trebuie sa alegi o variantă!"})
             } else {
                 setSubmitForm({value: true})
+                setSeconds(0);
             }
 
             if (selectedAnswer.answer === questionData.correct_answer) {
@@ -501,15 +728,11 @@ export default function Training() {
 
     const handlePlayClick = e => {
         e.preventDefault();
-        setIsPlayButtonPressed({value: "true"})
-        /*console.log(questionData.questionId)
-        console.log(questionData.question)
-        console.log(questionData.var_1)
-        console.log(questionData.var_2)
-        console.log(questionData.var_3)
-        console.log(questionData.var_4)
-        console.log(questionData.correct_answer)*/
-        selectQueries();
+        if (easy.value === "true" || medium.value === "true" || hard.value === "true") {
+            setIsPlayButtonPressed({value: "true"})
+            selectQueries();
+        }
+
     }
 
     const handleButtonShowFeedback = e => {
@@ -517,7 +740,13 @@ export default function Training() {
         setIsSendChallengePressed({value: "false"})
         if (buttonShowFeedback.value === "false") {
             setButtonShowFeedback({value: "true"})
-            changePoints("decrement", 50)
+            if (typeOfQuestionFromDatabase.value === "easy") {
+                changePoints("decrement", easyShowFedbackPoints)
+            } else if (typeOfQuestionFromDatabase.value === "medium") {
+                changePoints("decrement", mediumShowFedbackPoints)
+            } else if (typeOfQuestionFromDatabase.value === "hard") {
+                changePoints("decrement", hardShowFedbackPoints)
+            }
         } else {
             setButtonShowFeedback({value: "false"})
         }
@@ -527,7 +756,13 @@ export default function Training() {
         e.preventDefault();
         setIsSendChallengePressed({value: "false"})
         setIsClickOnSubmitForAddFeedback({value: "true"})
-        changePoints("decrement", 25)
+        if (typeOfQuestionFromDatabase.value === "easy") {
+            changePoints("decrement", easyAddFedbackPoints)
+        } else if (typeOfQuestionFromDatabase.value === "medium") {
+            changePoints("decrement", mediumAddFedbackPoints)
+        } else if (typeOfQuestionFromDatabase.value === "hard") {
+            changePoints("decrement", hardAddFedbackPoints)
+        }
     }
 
     const handleAddFeedback = e => {
@@ -554,6 +789,8 @@ export default function Training() {
         setIsSendChallengePressed({value: "true"})
         if (usernameForSendChallenge.value === "") {
             setMessageForSendChallenge({value: "Trebuie să introduci username-ul!"})
+        } else if (usernameForSendChallenge.value === username.username) {
+            setMessageForSendChallenge({value: "Nu te poți provoca pe tine!"})
         } else {
 
             if (points.points < stake) {
@@ -605,7 +842,7 @@ export default function Training() {
         //e.preventDefault();
         setDisableFormControlForHelp({var1: false, var2: false, var3: false, var4: false})
         setErrorMessageForHelpQuestion({message: ""})
-        setTextForImageButton({value: "Afișează diagrama tabelei!"})
+        setTextForImageButton({value: "Afișează diagrama bazei de date!"})
         setIsDisplayImage({value: "false"})
         if (isImageCreate.value === "true") {
             let element = document.getElementById("divForImage");
@@ -613,8 +850,8 @@ export default function Training() {
             setIsImageCreate({value: "false"})
         }
         setMessageForSendChallenge({value: ""})
-        if (easy.value === "true" && medium.value === "false" && hard.value === "false") {
-            setErrorData({message: "Nu poti dezactiva toate optiunile"});
+        if (easy.value === "false" && points.points < easyPoints) {
+            setErrorData({message: "Nu ai destule puncte pentru a te antrena cu întrebări easy."});
         } else {
             if (easy.value === "true") {
                 setEasy({value: "false"});
@@ -631,18 +868,19 @@ export default function Training() {
     }
     const handleMediumChange = e => {
         //e.preventDefault();
+
         setDisableFormControlForHelp({var1: false, var2: false, var3: false, var4: false})
         setErrorMessageForHelpQuestion({message: ""})
         setIsDisplayImage({value: "false"})
-        setTextForImageButton({value: "Afișează diagrama tabelei!"})
+        setTextForImageButton({value: "Afișează diagrama bazei de date!"})
         if (isImageCreate.value === "true") {
             let element = document.getElementById("divForImage");
             element.remove();
             setIsImageCreate({value: "false"})
         }
         setMessageForSendChallenge({value: ""})
-        if (easy.value === "false" && medium.value === "true" && hard.value === "false") {
-            setErrorData({message: "Nu poti dezactiva toate optiunile"});
+        if (medium.value === "false" && points.points < mediumPoints) {
+            setErrorData({message: "Nu ai destule puncte pentru a te antrena cu întrebări medium."});
         } else {
             if (medium.value === "true") {
                 setMedium({value: "false"});
@@ -659,18 +897,19 @@ export default function Training() {
     }
     const handleHardChange = e => {
         //e.preventDefault();
+        setSeconds(120);
         setDisableFormControlForHelp({var1: false, var2: false, var3: false, var4: false})
         setErrorMessageForHelpQuestion({message: ""})
         setIsDisplayImage({value: "false"})
         setMessageForSendChallenge({value: ""})
-        setTextForImageButton({value: "Afișează diagrama tabelei!"})
+        setTextForImageButton({value: "Afișează diagrama bazei de date!"})
         if (isImageCreate.value === "true") {
             let element = document.getElementById("divForImage");
             element.remove();
             setIsImageCreate({value: "false"})
         }
-        if (easy.value === "false" && medium.value === "false" && hard.value === "true") {
-            setErrorData({message: "Nu poti dezactiva toate optiunile"});
+        if (hard.value === "false" && points.points < hardPoints) {
+            setErrorData({message: "Nu ai destule puncte pentru a te antrena cu întrebări hard."});
         } else {
             if (hard.value === "true") {
                 setHard({value: "false"});
@@ -688,7 +927,7 @@ export default function Training() {
         e.preventDefault();
         if (isDisplayImage.value === "false") {
             setIsDisplayImage({value: "true"})
-            setTextForImageButton({value: "Ascunde diagrama tabelei!"})
+            setTextForImageButton({value: "Ascunde diagrama bazei de date!"})
             if (isImageCreate.value === "false") {
                 let img = document.createElement("img");
                 img.src = diagram;
@@ -708,18 +947,22 @@ export default function Training() {
                 element.remove();
                 setIsImageCreate({value: "false"})
             }
-            setTextForImageButton({value: "Afișează diagrama tabelei!"})
+            setTextForImageButton({value: "Afișează diagrama bazei de date!"})
         }
     }
     const handleHelpQuestion = e => {
         e.preventDefault();
         if (typeOfQuestionFromDatabase.value !== "hard") {
             //verific daca are suficiente puncte, altfel mesaj
-            if (points.points <= 50) {
+            if (points.points <= 30) {
                 setErrorMessageForHelpQuestion({message: "Nu ai suficiente puncte!"})
             } else {
                 setIsHelpButtonPressed({value: "true"})
-                changePoints("decrement", 50)
+                if (typeOfQuestionFromDatabase.value === "easy") {
+                    changePoints("decrement", easyHelpQuestionPoints)
+                } else if (typeOfQuestionFromDatabase === "medium") {
+                    changePoints("decrement", mediumHelpQuestionPoints)
+                }
                 if (questionData.var_1 === questionData.correct_answer) {
                     let randomNumber = Math.floor(Math.random() * 4) + 1;
                     while (randomNumber === 1) {
@@ -771,19 +1014,19 @@ export default function Training() {
                 }
             }
         } else {
-            if (points.points <= 100) {
+            if (points.points <= 90) {
                 setErrorMessageForHelpQuestion({message: "Nu ai suficiente puncte!"})
             } else {
                 setIsHelpButtonPressed({value: "true"})
-                changePoints("decrement", 100)
+                changePoints("decrement", hardHelpQuestionPoints)
             }
         }
     }
     return (
-        <div className="centerContent">
+        <div>
             {!localStorage.getItem("token") && changePage()}
             {localStorage.getItem("token") &&
-            <div>
+            <div className="headContent">
                 <h2>Alege tipurile de intrebari pe care vrei să le primești!</h2>
                 <div className="topContent">
                     <div>
@@ -835,7 +1078,7 @@ export default function Training() {
                         />
                     </div>
                 </div>
-                {isPlayButtonPressed.value === "false" &&
+                {isPlayButtonPressed.value === "false" && (easy.value === "true" || medium.value === "true" || hard.value === "true") &&
                 <div className="buttonPlay">
                     <button className="btn btn-primary btn-block"
                             onClick={handlePlayClick}>Play
@@ -855,10 +1098,22 @@ export default function Training() {
 
                     </div>
                 </div>
+                {isPlayButtonPressed.value === "true" && typeOfQuestionFromDatabase.value === "easy" && expiredTime.value === "true" && submitForm.value === "true" &&
+                <div className="centerContent">
+                    <h3 id="message">Timp expirat, ai pierdut {easyPoints} puncte!</h3>
+                </div>}
+                {isPlayButtonPressed.value === "true" && typeOfQuestionFromDatabase.value === "medium" && expiredTime.value === "true" && submitForm.value === "true" &&
+                <div className="centerContent">
+                    <h3 id="message">Timp expirat, ai pierdut {mediumPoints} puncte!</h3>
+                </div>}
+                {isPlayButtonPressed.value === "true" && typeOfQuestionFromDatabase.value === "hard" && expiredTime.value === "true" && submitForm.value === "true" &&
+                <div className="centerContent">
+                    <h3 id="message">Timp expirat, ai pierdut {hardPoints} puncte!</h3>
+                </div>}
                 {isPlayButtonPressed.value === "true" && expiredTime.value === "false" &&
-                <div>
+                <div className="centerContent">
                     <button className="btn btn-primary btn-block">Timp
-                        rămas <TimerIcon/>: {viewSeconds.value} secunde
+                        rămas <TimerIcon/>: {seconds} secunde
                     </button>
                 </div>}
                 {isPlayButtonPressed.value === "true" && typeOfQuestionFromDatabase.value !== "hard" &&
@@ -926,7 +1181,7 @@ export default function Training() {
                                         placeholder="Write your response here"
                                         minRows={3}
                                         style={{width: 600}}
-                                        value = {hardQuestionResponse.value}
+                                        value={hardQuestionResponse.value}
                                         onChange={e => setHardQuestionsResponse({value: e.target.value})}
                                     />
                                 </div>
@@ -950,131 +1205,183 @@ export default function Training() {
                     </form>
                 </div>
                 }
-                {isPlayButtonPressed.value === "true" && isHelpButtonPressed.value === "false" && typeOfQuestionFromDatabase.value !== "hard" &&
-                <div className="justified">
-                    <button className="btn btn-primary btn-block"
-                            onClick={handleHelpQuestion}><SupportIcon/> Ajutor întrebare (-50 de puncte)
-                    </button>
-                </div>}
-                {isPlayButtonPressed.value === "true" && isHelpButtonPressed.value === "false" && typeOfQuestionFromDatabase.value === "hard" &&
-                <div className="justified">
-                    <button className="btn btn-primary btn-block"
-                            onClick={handleHelpQuestion}><SupportIcon/> Ajutor întrebare (-100 de puncte)
-                    </button>
-                </div>}
-                {isPlayButtonPressed.value === "true" && isHelpButtonPressed.value === "true" && typeOfQuestionFromDatabase.value === "hard" &&
-                <div className="justified">
-                    <h3>Cuvinte cheie: {stringForHardQuestionHelp.value}</h3>
-                </div>}
-                {isPlayButtonPressed.value === "true" && isHelpButtonPressed.value === "true" && errorMessageForHelpQuestion.message &&
-                <div className="justified">
-                    <h3>{errorMessageForHelpQuestion.message}</h3>
-                </div>}
                 {isPlayButtonPressed.value === "true" &&
                 <div className="justified">
                     <p>Număr de rezolvări: {questionData.number_of_answers}</p>
                 </div>}
-                {isPlayButtonPressed.value === "true" &&
-                <div className="justified">
-                    <button className="btn btn-primary btn-block"
-                            onClick={handleChallenge}>Provoacă un utilizator <PersonIcon/> <ForwardToInboxIcon/>
-                    </button>
-                </div>}
-                {isPlayButtonPressed.value === "true" && isChallengePressed.value === "true" &&
-                <div>
-                    <div className="justified">
-                        <TextareaAutosize
-                            id="username"
-                            aria-label="empty textarea"
-                            placeholder="Write here username"
-                            minRows={1}
-                            style={{width: 200}}
-                            value={usernameForSendChallenge.value}
-                            onChange={e => setUsernameForSendChallenge({value: e.target.value})}
-                        />
+                <div className="elements">
+                    <div className="elementInElements">
+                        {isPlayButtonPressed.value === "true" && isHelpButtonPressed.value === "false" && typeOfQuestionFromDatabase.value === "easy" &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleHelpQuestion}><SupportIcon/> Ajutor întrebare
+                                (-{easyHelpQuestionPoints} puncte)
+                            </button>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && isHelpButtonPressed.value === "false" && typeOfQuestionFromDatabase.value === "medium" &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleHelpQuestion}><SupportIcon/> Ajutor întrebare
+                                (-{mediumHelpQuestionPoints} de puncte)
+                            </button>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && isHelpButtonPressed.value === "false" && typeOfQuestionFromDatabase.value === "hard" &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleHelpQuestion}><SupportIcon/> Ajutor întrebare
+                                (-{hardHelpQuestionPoints} de puncte)
+                            </button>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && isHelpButtonPressed.value === "true" && typeOfQuestionFromDatabase.value === "hard" &&
+                        <div className="justified">
+                            <h3>Cuvinte cheie: {stringForHardQuestionHelp.value}</h3>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && isHelpButtonPressed.value === "true" && errorMessageForHelpQuestion.message &&
+                        <div className="justified">
+                            <h3>{errorMessageForHelpQuestion.message}</h3>
+                        </div>}
                     </div>
-                    <div className="justified">
-                        <Box sx={{minWidth: 120}}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">BET</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={stake}
-                                    label="stake"
-                                    onChange={handleSetStake}
-                                >
-                                    <MenuItem value={''}>None</MenuItem>
-                                    <MenuItem value={25}>25 <MonetizationOnIcon/></MenuItem>
-                                    <MenuItem value={50}>50 <MonetizationOnIcon/></MenuItem>
-                                    <MenuItem value={150}>150 <MonetizationOnIcon/></MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </div>
-                </div>}
-                {isPlayButtonPressed.value === "true" && isChallengePressed.value === "true" && stake &&
-                <div className="justified">
-                    <button className="btn btn-primary btn-block"
-                            onClick={handleSendChallenge}>Send for {stake} <MonetizationOnIcon/>
-                    </button>
-                </div>}
+                    <div className="elementInElements">
+                        {isPlayButtonPressed.value === "true" &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleChallenge}>Provoacă un utilizator <PersonIcon/>
+                                <ForwardToInboxIcon/>
+                            </button>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && isChallengePressed.value === "true" &&
+                        <div className="justified">
+                            <div className="ElementForChallenge">
+                                <div className="itemForElementForChallenge">
+                                    <TextareaAutosize
+                                        id="username"
+                                        aria-label="empty textarea"
+                                        placeholder="Write here username"
+                                        minRows={1}
+                                        style={{width: 200}}
+                                        value={usernameForSendChallenge.value}
+                                        onChange={e => setUsernameForSendChallenge({value: e.target.value})}
+                                    />
+                                </div>
+                                <div className="itemForElementForChallenge">
+                                    <Box sx={{minWidth: 120}}>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">BET</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={stake}
+                                                label="stake"
+                                                onChange={handleSetStake}
+                                            >
+                                                <MenuItem value={''}>None</MenuItem>
+                                                <MenuItem value={25}>25 <MonetizationOnIcon/></MenuItem>
+                                                <MenuItem value={50}>50 <MonetizationOnIcon/></MenuItem>
+                                                <MenuItem value={150}>150 <MonetizationOnIcon/></MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                </div>
+                            </div>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && isChallengePressed.value === "true" && stake &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleSendChallenge}>Send for {stake} <MonetizationOnIcon/>
+                            </button>
+                        </div>}
 
-                {isPlayButtonPressed.value === "true" && isSendChallengePressed.value === "true" && messageForSendChallenge.value &&
-                <div className="justified">
-                    <h3>{messageForSendChallenge.value}</h3>
-                </div>}
-
-                {isPlayButtonPressed.value === "true" && isClickOnSubmitForAddFeedback.value === "false" &&
-                <div className="justified">
-                    <button className="btn btn-primary btn-block"
-                            onClick={handleButtonForAddFeedback}>Adauga feedback (-25 de puncte)
-                    </button>
-                </div>}
-                {isPlayButtonPressed.value === "true" && isClickOnSubmitForAddFeedback.value === "true" &&
-                <div>
-                    <div className="justified">
-                        <TextareaAutosize
-                            id="idFeedbackUser"
-                            aria-label="empty textarea"
-                            placeholder="Write your feedback here"
-                            minRows={3}
-                            style={{width: 300}}
-                            value={userFeedback.answer}
-                            onChange={e => setUserFeedback({answer: e.target.value})}
-                        />
+                        {isPlayButtonPressed.value === "true" && isSendChallengePressed.value === "true" && messageForSendChallenge.value &&
+                        <div className="justified">
+                            <h3>{messageForSendChallenge.value}</h3>
+                        </div>}
                     </div>
-                    <div className="justified">
-                        <button className="btn btn-primary btn-block"
-                                onClick={handleAddFeedback}>TRIMITE FEEDBACK!
-                        </button>
+                    <div className="elementInElements">
+                        {isPlayButtonPressed.value === "true" && isClickOnSubmitForAddFeedback.value === "false" && typeOfQuestionFromDatabase.value === "easy" &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleButtonForAddFeedback}>Adauga feedback
+                                (-{easyAddFedbackPoints} puncte)
+                            </button>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && isClickOnSubmitForAddFeedback.value === "false" && typeOfQuestionFromDatabase.value === "medium" &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleButtonForAddFeedback}>Adauga feedback
+                                (-{mediumAddFedbackPoints} puncte)
+                            </button>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && isClickOnSubmitForAddFeedback.value === "false" && typeOfQuestionFromDatabase.value === "hard" &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleButtonForAddFeedback}>Adauga feedback (-{hardAddFedbackPoints} de
+                                puncte)
+                            </button>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && isClickOnSubmitForAddFeedback.value === "true" &&
+                        <div>
+                            <div className="justified">
+                                <TextareaAutosize
+                                    id="idFeedbackUser"
+                                    aria-label="empty textarea"
+                                    placeholder="Write your feedback here"
+                                    minRows={3}
+                                    style={{width: 300}}
+                                    value={userFeedback.answer}
+                                    onChange={e => setUserFeedback({answer: e.target.value})}
+                                />
+                            </div>
+                            <div className="justified">
+                                <button className="btn btn-primary btn-block"
+                                        onClick={handleAddFeedback}>TRIMITE FEEDBACK!
+                                </button>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                    <div className="elementInElements">
+                        {isPlayButtonPressed.value === "true" && buttonShowFeedback.value === "false" && typeOfQuestionFromDatabase.value === "easy" &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleButtonShowFeedback}>Vezi feedback-urile despre intrebare
+                                (-{easyShowFedbackPoints} puncte)
+                            </button>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && buttonShowFeedback.value === "false" && typeOfQuestionFromDatabase.value === "medium" &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleButtonShowFeedback}>Vezi feedback-urile despre intrebare
+                                (-{mediumShowFedbackPoints} puncte)
+                            </button>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && buttonShowFeedback.value === "false" && typeOfQuestionFromDatabase.value === "hard" &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleButtonShowFeedback}>Vezi feedback-urile despre intrebare
+                                (-{hardShowFedbackPoints} de puncte)
+                            </button>
+                        </div>}
+                        {isPlayButtonPressed.value === "true" && buttonShowFeedback.value === "true"
+                        &&
+                        <div className="justified">
+                            <button className="btn btn-primary btn-block"
+                                    onClick={handleButtonShowFeedback}>Ascunde feedback-urile despre intrebare
+                            </button>
+
+                        </div>}
                     </div>
                 </div>
-                }
-                {isPlayButtonPressed.value === "true" && buttonShowFeedback.value === "false" &&
-                <div className="justified">
-                    <button className="btn btn-primary btn-block"
-                            onClick={handleButtonShowFeedback}>Vezi feedback-urile despre intrebare (-50 de
-                        puncte)
-                    </button>
-                </div>}
-                {isPlayButtonPressed.value === "true" && buttonShowFeedback.value === "true"
-                &&
-                <div className="justified">
-                    <button className="btn btn-primary btn-block"
-                            onClick={handleButtonShowFeedback}>Ascunde feedback-urile despre intrebare
-                    </button>
-
-                </div>}
                 {isPlayButtonPressed.value === "true" && buttonShowFeedback.value === "true" &&
-                <div className="justified" style={{height: 400, width: '100%'}}>
-                    <DataGrid className="justified"
-                              rows={rows}
-                              columns={columns}
-                              pageSize={5}
-                              rowsPerPageOptions={[5]}
-                              disableSelectionOnClick
-                    />
+                <div className="justifiedFeedback">
+                    <div className="elemJustifiedFeedback">
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            pageSize={5}
+                            rowsPerPageOptions={[5]}
+                            disableSelectionOnClick
+                        />
+                    </div>
                 </div>}
             </div>}
         </div>

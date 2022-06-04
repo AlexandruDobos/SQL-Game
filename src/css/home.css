@@ -1,0 +1,36 @@
+﻿.head{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.topContent{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 50%;
+}
+#elemTopContent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+p.a{
+    font-weight: bold;
+    text-align: center;
+}
+
+p.b{
+    font-style: italic;
+}
+
+.centerContent{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+    margin-top: 20px;
+}

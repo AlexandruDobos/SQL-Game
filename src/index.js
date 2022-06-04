@@ -10,7 +10,8 @@ import axios from "axios";
 
 let hotspot = "http://172.20.10.14"
 let iasi = "http://192.168.100.27"
-let tara = "http://192.168.1.2"
+let tara = "http://192.168.1.4"
+let facultate = "http://10.20.0.31"
 
 let IPv4;
 export default IPv4 = tara;

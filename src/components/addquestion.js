@@ -306,7 +306,7 @@ export default function AddQuestion() {
             <div>
                 <h3>De ce tip vrei să fie întrebarea?</h3>
             </div>
-            <div className="topContent">
+            <div className="topContentMenu">
                 <div>
                     <FormControlLabel
                         sx={{

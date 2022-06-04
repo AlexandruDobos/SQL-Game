@@ -1,6 +1,12 @@
-﻿.centerContent{
+﻿.headContent{
+    width: 100%;
+}
+.centerContent{
     display: flex;
     justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 100%;
 }
 .itemCenterContent{
     display: flex;
@@ -19,14 +25,18 @@
     background: #1C8EF9 !important;
     color: white;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     margin-top: 5%;
 }
 
 .topContent{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 h2{
@@ -34,7 +44,7 @@ h2{
     font-size: 30px;
 }
 
-h3{
+#message h3{
     font-size: 17px;
     text-align: center;
     padding: 20px 0;
@@ -47,9 +57,24 @@ h3{
 }
 
 .justified{
-    margin-top: 30px;
     display: flex;
     justify-content: center;
+    margin-top: 30px;
+}
+
+.justifiedFeedback{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin-top: 30px;
+    width: 100%;
+    height: 400px;
+}
+
+.elemJustifiedFeedback{
+    width: 50%;
+    height: 400px;
 }
 
 p{
@@ -60,6 +85,35 @@ p{
 
 .button{
     margin-bottom: 10px;
+}
+
+.elements{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    align-content: center;
+    gap: 10px 30px;    
+}
+
+.elementInElements{
+    width: 33%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.elementForChallenge{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.itemForElementForChallenge{
+    margin-top: 10px;
 }
 
 

@@ -211,11 +211,11 @@ export default function Settings() {
     }
     
     return (
-        <div>
+        <div className="principalDiv">
             <h2 id="h2Title">{username.username} Settings Page</h2>
             <div className="formulary">
                 <div id="formularyChild">
-                    <p id="title">Your email</p>
+                    <p >Your email</p>
                     <TextField
                         disabled
                         id="outlined-disabled"

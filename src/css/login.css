@@ -1,7 +1,7 @@
 ﻿.buttonLogin{
     display: flex;
     justify-content: center;
-    margin-top: 5%;
+    margin-top: 10px;
 }
 
 .errorLogin{
@@ -10,4 +10,27 @@
     display: flex;
     justify-content: center;
     margin-top: 5%;
+}
+
+.formLogin{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+    margin-left: 25%;
+}
+
+label{
+    text-align: center;
+}
+
+input{
+    text-align: center;
 }

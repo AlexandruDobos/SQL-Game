@@ -44,9 +44,13 @@
     }
     .navigation {
         flex-flow: column wrap;
-        justify-content: space-between;
+        justify-content: center;
         padding: 0;
         margin: unset;
+    }
+    #element{
+        display: flex;
+        justify-content: center;
     }
     .navigation a {
         text-align: center;

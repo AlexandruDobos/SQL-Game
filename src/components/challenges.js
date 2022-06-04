@@ -4,7 +4,10 @@ import IPv4 from '../index';
 import TextField from "@mui/material/TextField";
 import {DataGrid} from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-import {FormControl, FormControlLabel, Paper, Radio, RadioGroup, TextareaAutosize} from "@mui/material";
+import {FormControl, FormControlLabel, Paper, Popper, Radio, RadioGroup, TextareaAutosize} from "@mui/material";
+import TimerIcon from "@mui/icons-material/Timer";
+import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
 
 export default function Challenges() {
 
@@ -44,6 +47,7 @@ export default function Challenges() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'difficulty',
@@ -52,6 +56,7 @@ export default function Challenges() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'stake',
@@ -60,6 +65,7 @@ export default function Challenges() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'time',
@@ -68,6 +74,7 @@ export default function Challenges() {
             sortable: false,
             editable: false,
             width: 160,
+            renderCell: renderCellExpand,
         },
         {
             field: 'acceptChallenge',
@@ -77,6 +84,7 @@ export default function Challenges() {
             cellClassName: 'super-app-theme--cell-accept',
             width: 160,
             valueGetter: () => 'Acceptă',
+            renderCell: renderCellExpand,
         },
         {
             field: 'deleteChallenge',
@@ -86,8 +94,119 @@ export default function Challenges() {
             cellClassName: 'super-app-theme--cell-delete',
             width: 160,
             valueGetter: () => 'Respinge',
+            renderCell: renderCellExpand,
         },
     ];
+
+    const [seconds, setSeconds] = useState(1000000);
+    const [expiredTime, setIsExpiredTime] = useState({value: "false"})
+    const [semaphore, setSemaphore] = useState(true)
+    function isOverflown(element) {
+        return (
+            element.scrollHeight > element.clientHeight ||
+            element.scrollWidth > element.clientWidth
+        );
+    }
+
+    const GridCellExpand = React.memo(function GridCellExpand(props) {
+        const { width, value } = props;
+        const wrapper = React.useRef(null);
+        const cellDiv = React.useRef(null);
+        const cellValue = React.useRef(null);
+        const [anchorEl, setAnchorEl] = React.useState(null);
+        const [showFullCell, setShowFullCell] = React.useState(false);
+        const [showPopper, setShowPopper] = React.useState(false);
+
+        const handleMouseEnter = () => {
+            const isCurrentlyOverflown = isOverflown(cellValue.current);
+            setShowPopper(isCurrentlyOverflown);
+            setAnchorEl(cellDiv.current);
+            setShowFullCell(true);
+        };
+
+        const handleMouseLeave = () => {
+            setShowFullCell(false);
+        };
+
+        React.useEffect(() => {
+            if (!showFullCell) {
+                return undefined;
+            }
+
+            function handleKeyDown(nativeEvent) {
+                // IE11, Edge (prior to using Bink?) use 'Esc'
+                if (nativeEvent.key === 'Escape' || nativeEvent.key === 'Esc') {
+                    setShowFullCell(false);
+                }
+            }
+
+            document.addEventListener('keydown', handleKeyDown);
+
+            return () => {
+                document.removeEventListener('keydown', handleKeyDown);
+            };
+        }, [setShowFullCell, showFullCell]);
+
+        return (
+            <Box
+                ref={wrapper}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                sx={{
+                    alignItems: 'center',
+                    lineHeight: '24px',
+                    width: 1,
+                    height: 1,
+                    position: 'relative',
+                    display: 'flex',
+                }}
+            >
+                <Box
+                    ref={cellDiv}
+                    sx={{
+                        height: 1,
+                        width,
+                        display: 'block',
+                        position: 'absolute',
+                        top: 0,
+                    }}
+                />
+                <Box
+                    ref={cellValue}
+                    sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                >
+                    {value}
+                </Box>
+                {showPopper && (
+                    <Popper
+                        open={showFullCell && anchorEl !== null}
+                        anchorEl={anchorEl}
+                        style={{ width, marginLeft: -17 }}
+                    >
+                        <Paper
+                            elevation={1}
+                            style={{ minHeight: wrapper.current.offsetHeight - 3 }}
+                        >
+                            <Typography variant="body2" style={{ padding: 8 }}>
+                                {value}
+                            </Typography>
+                        </Paper>
+                    </Popper>
+                )}
+            </Box>
+        );
+    });
+
+    GridCellExpand.propTypes = {
+        value: PropTypes.string.isRequired,
+        width: PropTypes.number.isRequired,
+    };
+
+    function renderCellExpand(params) {
+        return (
+            <GridCellExpand value={params.value || ''} width={params.colDef.computedWidth} />
+        );
+    }
 
     function DecodeJWT() {
         if (localStorage.getItem("token")) {
@@ -121,6 +240,10 @@ export default function Challenges() {
                         lostChallenges: data["JWT"]["data"]["userLostChallenges"]
                     })
                     GetChallenges(data["JWT"]["data"]["username"]);
+                    //setClickOnCorrectCell({value: "false"})
+                    setSubmitForm({value: "false"})
+                    setIsExpiredTime({value: "false"})
+                    //setChallengeMessage({message: ""})
                 })
         }
     }
@@ -146,8 +269,8 @@ export default function Challenges() {
                 setRows(data.message)
             })
     }
-    
-    function IncrementResultChallenges(parameter){
+
+    function IncrementResultChallenges(parameter) {
         const data = {
             email: email.email,
         }
@@ -214,8 +337,8 @@ export default function Challenges() {
         }
 
     }
-    
-    function AddPointsToRival(){
+
+    function AddPointsToRival() {
         const data = {
             username: whoProposedUsername.username,
             stake: parseInt(stake.value) * 2
@@ -224,15 +347,15 @@ export default function Challenges() {
             method: "POST",
             body: JSON.stringify(data)
         }
-            let input = IPv4 + "/Licenta/models/AddPointsToRival.php"
-            fetch(
-                input,
-                requestOptions
-            )
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log("puncte adaugate rivalului")
-                })
+        let input = IPv4 + "/Licenta/models/AddPointsToRival.php"
+        fetch(
+            input,
+            requestOptions
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("puncte adaugate rivalului")
+            })
     }
 
     function SelectQuestion(question_id) {
@@ -483,6 +606,7 @@ export default function Challenges() {
     };
 
     const handleOnCellClick = (params) => {
+        setChallengeMessage({message: ""})
         setSelectedAnswer({answer: ""})
         setHardQuestionsResponse({value: ""})
         setChecked(() => {
@@ -494,7 +618,7 @@ export default function Challenges() {
             };
         });
         if (params.field === 'acceptChallenge') {
-            
+            setSemaphore(true);
             setClickOnCorrectCell({value: "true"})
             //vad daca are puncte suficiente sa accepte, altfel mesaj eroare
             rows.map((item) => {
@@ -508,6 +632,13 @@ export default function Challenges() {
                         ChangePoints("decrement", parseInt(item["stake"]))
 
                         setQuestionDifficulty({value: item["difficulty"]})
+                        if (item["difficulty"] === "easy") {
+                            setSeconds(30);
+                        } else if (item["difficulty"] === "medium") {
+                            setSeconds(45);
+                        } else if (item["difficulty"] === "hard") {
+                            setSeconds(120);
+                        }
                         //iau id-ul intrebarii si selectez din training_queries intrebarea si o formulez
                         SelectQuestion(item["id_query"])
                         //trebuie sa vad ce id are provocarea si o sa o sterg din baza de date
@@ -534,18 +665,36 @@ export default function Challenges() {
         }
     }
 
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            setSeconds((s) => s - 1);
+            if (seconds < 1) {
+                setIsExpiredTime({value: "true"});
+                setSubmitForm({value: "true"});
+                setClickOnCorrectCell({value: "false"})
+                if(semaphore === true){
+                setChallengeMessage({message: "Timpul a expirat, ai pierdut provocarea!"})
+                    setSemaphore(false);
+                }
+                clearInterval(interval);
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [seconds]);
+
     return (
         <div>
-
             <div className="formulary">
                 <div id="formularyChild">
-                    <p id="title">Total Challenges</p>
-                    <TextField
-                        disabled
-                        id="outlined-disabled"
-                        label={parseInt(challengesDetails.winChallenges) + parseInt(challengesDetails.lostChallenges)}
-                    />
+                <p id="title">Total Challenges</p>
+                <TextField
+                    disabled
+                    id="outlined-disabled"
+                    label={parseInt(challengesDetails.winChallenges) + parseInt(challengesDetails.lostChallenges)}
+                />
                 </div>
+            </div>
+            <div className="formulary">
                 <div id="formularyChild">
                     <p id="title">Win Challenges</p>
                     <TextField
@@ -590,6 +739,16 @@ export default function Challenges() {
                     />
                 </Box>
             </div>
+            {clickOnCorrectCell.value === "true" && expiredTime.value === "true" && submitForm.value === "false" &&
+            <div className="centerContent">
+                <h3>Timp expirat, ai pierdut provocarea!</h3>
+            </div>}
+            {clickOnCorrectCell.value === "true" && expiredTime.value === "false" &&
+            <div className="centerContent">
+                <button className="btn btn-primary btn-block">Timp
+                    rămas <TimerIcon/>: {seconds} secunde
+                </button>
+            </div>}
             <div>
                 {clickOnCorrectCell.value === "true" && questionDifficulty.value !== "hard" &&
                 <div>
@@ -619,10 +778,10 @@ export default function Challenges() {
                                 <div className="buttonSubmit">
                                     <div>
                                         {
-                                        <button
+                                            <button
                                                 className="btn btn-primary btn-block">Submit
-                                        </button>}
-                                        
+                                            </button>}
+
                                     </div>
                                 </div>
                             </FormControl>
@@ -645,19 +804,16 @@ export default function Challenges() {
                                         placeholder="Write your response here"
                                         minRows={3}
                                         style={{width: 600}}
-                                        value = {hardQuestionResponse.value}
+                                        value={hardQuestionResponse.value}
                                         onChange={e => setHardQuestionsResponse({value: e.target.value})}
                                     />
                                 </div>
-                                <div className="buttonSubmit">
-                                    <div>
-                                        {
+                                    <div className="buttonSubmit">
                                             <button
                                                 className="btn btn-primary btn-block">Submit
-                                            </button>}
+                                            </button>
 
                                     </div>
-                                </div>
                             </Paper>
                         </div>
                     </form>
