@@ -93,13 +93,6 @@
     text-align: center;
 }
 
-/*.boxComponentMenu {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 200px;
-}*/
 
 .ConfirmOrderDiv{
     display: flex;
@@ -140,6 +133,11 @@
     margin-top: 20px;
 }
 
+#textForQuestion{
+    text-align: center;
+    font-size: 35px;
+}
+
 
 .specialDiv{
     
@@ -148,3 +146,62 @@
 .paper{
     width: 100%;
 }
+
+#divForMobileImage{
+    display: none;
+}
+
+.responseVariant{
+    text-align: justify !important;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace !important;
+}
+
+@media all and (max-width: 425px) {
+
+    .componentGameQuestion{
+        font-size: large;
+        text-align: center;
+    }
+    
+    .principal{
+        width: 100%;
+    }
+    
+    .component{
+        flex-direction: column;
+    }
+    
+    .componentMenu{
+        width: 100%;
+        
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    
+    .buttonLevelGame{
+        margin-right: 10px;
+    }
+    
+    .paragraphGame{
+        width: 100%;
+    }
+    
+    .classForPaper{
+        width: 100%;
+    }
+
+    #divForImage{
+        display: none;
+    }
+
+    #divForMobileImage{
+        display: flex;
+    }
+
+    #textForQuestion{
+        font-size: large;
+    }
+    
+}
+

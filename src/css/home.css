@@ -1,36 +1,88 @@
-﻿.head{
+﻿.head {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     width: 100%;
+    align-items: center;
 }
-.topContent{
+
+.topContentHome {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width: 50%;
+    width: 100%;
 }
-#elemTopContent{
+
+#elemTopContent {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
 }
-p.a{
+
+p.a {
     font-weight: bold;
     text-align: center;
 }
 
-p.b{
+p.b {
     font-style: italic;
 }
 
-.centerContent{
+.centerContent {
     display: flex;
     justify-content: center;
     align-content: center;
     align-items: center;
     flex-direction: column;
-    width: 50%;
+    width: 100%;
     margin-top: 20px;
+}
+
+.divForTable {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.usersTable {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.usersTableRow {
+    display: flex;
+    text-align: center;
+    width: 100%;
+}
+
+.usersTableCell {
+    border: 1.5px solid #0d6efd;
+    border-collapse: collapse;
+    border-radius: 5px;
+    padding: 0.3rem;
+}
+
+@media all and (max-width: 768px) {
+    .principal {
+        width: 100%;
+    }
+
+    .auth-inner {
+        width: 100%;
+        padding: 0;
+    }
+
+    .head {
+        flex-direction: column;
+    }
+    
+    .centerContent{
+        width: 100%;
+    }
+    
+
 }

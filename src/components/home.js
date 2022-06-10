@@ -4,7 +4,7 @@ import IPv4 from '../index'
 import React, {useState} from 'react';
 import {DataGrid} from "@mui/x-data-grid";
 import Typography from "@mui/material/Typography";
-import {Paper, Popper} from "@mui/material";
+import {Paper, Popper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import PropTypes from 'prop-types';
 import Box from "@mui/material/Box";
 import {isOverflown} from "@mui/x-data-grid/utils/domUtils";
@@ -231,16 +231,16 @@ export default function Home() {
         window.location.href = '/login';
     }
 
-    const handleButtonSignUp = e =>{
+    const handleButtonSignUp = e => {
         window.location.href = '/register';
     }
     return (
-        <div>
+        <div className="principal">
             {!state.user && <h2>Bună! Loghează-te pentru a folosi aplicația!</h2>}
             {state.user && <h2>Bună, {username.user}</h2>}
             {error && <h2>Eroare la server</h2>}
-            <div className = "head">
-                <div className="topContent">
+            <div className="head">
+                <div className="topContentHome">
                     <div id="elemTopContent">
                         <p className="a">Ai aici topul celor mai buni utilizatori de pe site!</p>
                     </div>
@@ -251,19 +251,21 @@ export default function Home() {
                     {!state.user &&
                     <div id="elemTopContent">
                         <div className="buttonLogin">
-                            <button className="btn btn-primary btn-block" onClick={handleButtonLogin}>Loghează-te!</button>
+                            <button className="btn btn-primary btn-block" onClick={handleButtonLogin}>Loghează-te!
+                            </button>
                         </div>
                     </div>}
                     {!state.user &&
                     <div id="elemTopContent">
                         <div className="buttonLogin">
-                            <button className="btn btn-primary btn-block" onClick={handleButtonSignUp}>Crează-ți cont!</button>
+                            <button className="btn btn-primary btn-block" onClick={handleButtonSignUp}>Crează-ți cont!
+                            </button>
                         </div>
                     </div>}
-                    
+
                 </div>
                 <div className="centerContent">
-                    <div style={{height: 400, width: '55%'}}>
+                    {/*<div style={{height: 400, width: '50%'}}>
                         <DataGrid
                             rows={rows}
                             columns={columns}
@@ -271,6 +273,25 @@ export default function Home() {
                             rowsPerPageOptions={[5]}
                             disableSelectionOnClick
                         />
+                    </div>*/}
+                    <div className="divForTable">
+                        <div className="usersTable">
+
+                            <div className={"usersTableRow"}>
+                                <span className={"usersTableCell"} style={{width: "60%", background: "deepskyblue"}}><b>Username</b></span>
+                                <span className={"usersTableCell"} style={{width: "40%", background: "deepskyblue"}}><b>Puncte</b></span>
+                            </div>
+                            
+
+                            {rows.map((row) => (
+                                <div key={row.id} className={"usersTableRow"}>
+                                    <span className={"usersTableCell"}
+                                          style={{width: "60%", wordWrap: "break-word"}}>{row.username}</span>
+                                    <span className={"usersTableCell"} style={{width: "40%"}}>{row.points}</span>
+                                </div>
+                            ))}
+
+                        </div>
                     </div>
                 </div>
             </div>

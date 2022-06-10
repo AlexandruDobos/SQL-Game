@@ -8,6 +8,8 @@ import {FormControl, FormControlLabel, Paper, Popper, Radio, RadioGroup, Textare
 import TimerIcon from "@mui/icons-material/Timer";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export default function Challenges() {
 
@@ -101,6 +103,7 @@ export default function Challenges() {
     const [seconds, setSeconds] = useState(1000000);
     const [expiredTime, setIsExpiredTime] = useState({value: "false"})
     const [semaphore, setSemaphore] = useState(true)
+
     function isOverflown(element) {
         return (
             element.scrollHeight > element.clientHeight ||
@@ -109,7 +112,7 @@ export default function Challenges() {
     }
 
     const GridCellExpand = React.memo(function GridCellExpand(props) {
-        const { width, value } = props;
+        const {width, value} = props;
         const wrapper = React.useRef(null);
         const cellDiv = React.useRef(null);
         const cellValue = React.useRef(null);
@@ -173,7 +176,7 @@ export default function Challenges() {
                 />
                 <Box
                     ref={cellValue}
-                    sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                    sx={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
                 >
                     {value}
                 </Box>
@@ -181,13 +184,13 @@ export default function Challenges() {
                     <Popper
                         open={showFullCell && anchorEl !== null}
                         anchorEl={anchorEl}
-                        style={{ width, marginLeft: -17 }}
+                        style={{width, marginLeft: -17}}
                     >
                         <Paper
                             elevation={1}
-                            style={{ minHeight: wrapper.current.offsetHeight - 3 }}
+                            style={{minHeight: wrapper.current.offsetHeight - 3}}
                         >
-                            <Typography variant="body2" style={{ padding: 8 }}>
+                            <Typography variant="body2" style={{padding: 8}}>
                                 {value}
                             </Typography>
                         </Paper>
@@ -204,7 +207,7 @@ export default function Challenges() {
 
     function renderCellExpand(params) {
         return (
-            <GridCellExpand value={params.value || ''} width={params.colDef.computedWidth} />
+            <GridCellExpand value={params.value || ''} width={params.colDef.computedWidth}/>
         );
     }
 
@@ -605,7 +608,7 @@ export default function Challenges() {
 
     };
 
-    const handleOnCellClick = (params) => {
+    /*const handleOnCellClick = (params) => {
         setChallengeMessage({message: ""})
         setSelectedAnswer({answer: ""})
         setHardQuestionsResponse({value: ""})
@@ -663,6 +666,58 @@ export default function Challenges() {
                 })
             }
         }
+    }*/
+
+    const handleOnCellClick = (row, action) => {
+        setChallengeMessage({message: ""})
+        setSelectedAnswer({answer: ""})
+        setHardQuestionsResponse({value: ""})
+        setChecked(() => {
+            return {
+                var_1: false,
+                var_2: false,
+                var_3: false,
+                var_4: false
+            };
+        });
+        if (action === 'accept') {
+            setSemaphore(true);
+            setClickOnCorrectCell({value: "true"})
+            //vad daca are puncte suficiente sa accepte, altfel mesaj eroare
+                    if (row["stake"] <= points.points) {
+                        setWhoProposedUsername({username: row["who_provoked"]})
+                        console.log("are puncte destule")
+                        console.log(parseInt(row["stake"]))
+                        setStake({value: row["stake"]})
+                        //daca are puncte suficiente, ii scad din punctaj miza provocarii
+                        ChangePoints("decrement", parseInt(row["stake"]))
+
+                        setQuestionDifficulty({value: row["difficulty"]})
+                        if (row["difficulty"] === "easy") {
+                            setSeconds(30);
+                        } else if (row["difficulty"] === "medium") {
+                            setSeconds(45);
+                        } else if (row["difficulty"] === "hard") {
+                            setSeconds(120);
+                        }
+                        //iau id-ul intrebarii si selectez din training_queries intrebarea si o formulez
+                        SelectQuestion(row["id_query"])
+                        //trebuie sa vad ce id are provocarea si o sa o sterg din baza de date
+                        DeleteChallenge(row["id"])
+                    } else {
+                        setChallengeMessage({value: "Nu ai suficiente puncte pentru a accepta provocarea!"})
+                    }
+
+            //dupa ce formulez intrebarea verific daca raspunsul e corect
+            //daca e corect -> adaug dublul mizei in baza de date
+            //daca nu e corect -> mesaj ca a pierdut provocarea
+
+        } else {
+            if (action === 'delete') {
+                //daca nu accepta provocarea, sterg provocarea din baza de date.
+                        DeleteChallenge(row["id"])
+            }
+        }
     }
 
     React.useEffect(() => {
@@ -672,8 +727,8 @@ export default function Challenges() {
                 setIsExpiredTime({value: "true"});
                 setSubmitForm({value: "true"});
                 setClickOnCorrectCell({value: "false"})
-                if(semaphore === true){
-                setChallengeMessage({message: "Timpul a expirat, ai pierdut provocarea!"})
+                if (semaphore === true) {
+                    setChallengeMessage({message: "Timpul a expirat, ai pierdut provocarea!"})
                     setSemaphore(false);
                 }
                 clearInterval(interval);
@@ -683,20 +738,20 @@ export default function Challenges() {
     }, [seconds]);
 
     return (
-        <div>
+        <div className="principal">
             <div className="formulary">
                 <div id="formularyChild">
-                <p id="title">Total Challenges</p>
-                <TextField
-                    disabled
-                    id="outlined-disabled"
-                    label={parseInt(challengesDetails.winChallenges) + parseInt(challengesDetails.lostChallenges)}
-                />
+                    <p id="title">Total Provocări</p>
+                    <TextField
+                        disabled
+                        id="outlined-disabled"
+                        label={parseInt(challengesDetails.winChallenges) + parseInt(challengesDetails.lostChallenges)}
+                    />
                 </div>
             </div>
             <div className="formulary">
                 <div id="formularyChild">
-                    <p id="title">Win Challenges</p>
+                    <p id="title">Provocări câștigate</p>
                     <TextField
                         disabled
                         id="outlined-disabled"
@@ -704,7 +759,7 @@ export default function Challenges() {
                     />
                 </div>
                 <div id="formularyChild">
-                    <p id="title">Lost Challenges</p>
+                    <p id="title">Provocări pierdute</p>
                     <TextField
                         disabled
                         id="outlined-disabled"
@@ -713,7 +768,8 @@ export default function Challenges() {
                 </div>
             </div>
             <div className="centerContent">
-                <Box
+                <h2>Provocări în așteptare:</h2>
+                {/*<Box
                     sx={{
                         height: 300,
                         width: 1,
@@ -737,8 +793,34 @@ export default function Challenges() {
                         disableSelectionOnClick
                         onCellClick={handleOnCellClick}
                     />
-                </Box>
+                </Box>*/}
+                <div className="divForChallengesTable">
+                    <div className="challengesTable">
+
+                        <div className={"challengesTableRow"}>
+                            <span className={"challengesTableCell"} style={{width: "40%", background: "deepskyblue"}}><b>De la</b></span>
+                            <span className={"challengesTableCell "} style={{width: "25%", background: "deepskyblue"}}><b>Dificultate</b></span>
+                            <span className={"challengesTableCell onlyLaptop"} style={{width: "25%", background: "deepskyblue"}}><b>Data</b></span>
+                            <span className={"challengesTableCell"} style={{width: "15%", background: "deepskyblue"}}><b>Miza</b></span>
+                            <span className={"challengesTableCell"} style={{width: "20%", background: "#0dcaf0"}}><b>Acc/Res</b></span>
+                        </div>
+
+
+                        {rows.map((row) => (
+                            <div key={row.id} className={"challengesTableRow"}>
+                                <span className={"challengesTableCell"} style={{width: "40%", wordWrap: "break-word"}}>{row.who_provoked}</span>
+                                <span className={"challengesTableCell"} style={{width: "25%"}}>{row.difficulty}</span>
+                                <span className={"challengesTableCell onlyLaptop"} style={{width: "25%"}}>{row.time}</span>
+                                <span className={"challengesTableCell"} style={{width: "15%"}}>{row.stake}</span>
+                                <span className={"challengesTableCell"} style={{width: "10%", backgroundColor: 'rgba(157, 255, 118, 0.49)'}} onClick={()=>{handleOnCellClick(row, "accept")}}><CheckBoxIcon style={{ color: "darkgreen" }}/></span>
+                                <span className={"challengesTableCell"} style={{width: "10%", backgroundColor: '#d47483'}} onClick={()=>{handleOnCellClick(row, "delete")}}><ClearIcon style={{ color: "darkred" }}/></span>
+                            </div>
+                        ))}
+
+                    </div>
+                </div>
             </div>
+            {rows.length === 0 && <h3>Nu ai nicio provocare în acest moment!</h3>}
             {clickOnCorrectCell.value === "true" && expiredTime.value === "true" && submitForm.value === "false" &&
             <div className="centerContent">
                 <h3>Timp expirat, ai pierdut provocarea!</h3>
@@ -808,12 +890,12 @@ export default function Challenges() {
                                         onChange={e => setHardQuestionsResponse({value: e.target.value})}
                                     />
                                 </div>
-                                    <div className="buttonSubmit">
-                                            <button
-                                                className="btn btn-primary btn-block">Submit
-                                            </button>
+                                <div className="buttonSubmit">
+                                    <button
+                                        className="btn btn-primary btn-block">Submit
+                                    </button>
 
-                                    </div>
+                                </div>
                             </Paper>
                         </div>
                     </form>
@@ -825,9 +907,4 @@ export default function Challenges() {
         </div>
     )
 
-
-    //trebuie sa afisez aici cate challenges a primit pana acum,
-    //trebuie sa afisez aici cate challenges a reusit corecte
-    //trebuie sa afisez aici cate challenges a gresit
-    //trebuie sa afisez aici challenge-urile utilizatorului
 }

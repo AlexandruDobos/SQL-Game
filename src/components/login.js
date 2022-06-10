@@ -3,6 +3,7 @@ import '../css/login.css'
 //"http://192.168.100.27/Licenta/models/LoginUser.php",
 //"http://192.168.1.7/Licenta/models/LoginUser.php",
 import IPv4 from '../index';
+import {Link} from "react-router-dom";
 
 export default function Login() {
 
@@ -39,6 +40,8 @@ export default function Login() {
                         Array.from(document.querySelectorAll("input")).forEach(
                             input => (input.value = "")
                         );
+                    } else if (data.message === "Trebuie sa iti confirmi mail-ul!") {
+                        setErrorData({message: data.message})
                     } else {
                         localStorage.setItem('token', data.JWT);
                         setState({
@@ -85,9 +88,11 @@ export default function Login() {
                 <div className="buttonLogin">
                     <button className="btn btn-primary btn-block">Submit</button>
                 </div>
-                {/*       <p className="forgot-password text-right">
-                <Link to={'/forgot'}>Forgot password?</Link>
-            </p>*/}
+                <div className="buttonLogin">
+                    <p className="forgot-password text-right">
+                        <Link to={'/forgot'}>Forgot password?</Link>
+                    </p>
+                </div>
 
                 <div className="errorLogin">
                     {error}

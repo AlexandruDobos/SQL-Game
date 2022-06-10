@@ -7,6 +7,37 @@ export default function Register() {
 
     const [error, setError] = useState(false);
     const [errorData, setErrorData] = useState({message: ""});
+    
+    function SendEmail(email){
+        console.log(email);
+        const data = {
+            comanda: "Confirmare email",
+            email: email
+        }
+        const requestOptions = {
+            method: "POST",
+            body: JSON.stringify(data),
+        };
+        let input = IPv4 + "/Licenta/models/SendTokenToEmail.php"
+        fetch(
+            input,
+            requestOptions
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                setErrorData({message: data.message})
+                /*Array.from(document.querySelectorAll("input")).forEach(
+                    input => (input.value = "")
+                );*/
+            })
+            .catch((error) => {
+                /*Array.from(document.querySelectorAll("input")).forEach(
+                    input => (input.value = "")
+                );*/
+                console.log(error);
+                setErrorData({message: "Eroare"})
+            });
+    }
     const data = {
         first_name: "",
         last_name: "",
@@ -37,30 +68,21 @@ export default function Register() {
                     requestOptions
                 )
                     .then((response) => response.json())
-                    .then((data) => {
-                        console.log(data)
-                        if (data.message === "Username taken. Choose another one") {
+                    .then((dates) => {
+                        console.log(dates)
+                        if (dates.message === "Username taken. Choose another one") {
                             setErrorData({message: "Username existent deja."});
-                            data.first_name = "";
-                            data.last_name = "";
-                            data.email = "";
-                            data.password = "";
-                            data.password_confirm = "";
-                            Array.from(document.querySelectorAll("input")).forEach(
+                            /*Array.from(document.querySelectorAll("input")).forEach(
                                 input => (input.value = "")
-                            );
-                        } else if (data.message === "Email taken. Choose another one") {
+                            );*/
+                        } else if (dates.message === "Email taken. Choose another one") {
                             setErrorData({message: "Email existent deja."});
-                            data.first_name = "";
-                            data.last_name = "";
-                            data.email = "";
-                            data.password = "";
-                            data.password_confirm = "";
-                            Array.from(document.querySelectorAll("input")).forEach(
+                            /*Array.from(document.querySelectorAll("input")).forEach(
                                 input => (input.value = "")
-                            );
+                            );*/
                         } else {
-                            window.location.href = '/login';
+                            SendEmail(data.email);
+                            setErrorData({message: "Verifică mailul pentru a activa contul!"});
                         }
                     })
                     .catch((error) => {
@@ -69,26 +91,16 @@ export default function Register() {
                     });
             } else {
                 setErrorData({message: "Parolele nu coincid."});
-                data.first_name = "";
-                data.last_name = "";
-                data.email = "";
-                data.password = "";
-                data.password_confirm = "";
-                Array.from(document.querySelectorAll("input")).forEach(
+                /*Array.from(document.querySelectorAll("input")).forEach(
                     input => (input.value = "")
-                );
+                );*/
             }
         } else {
             setErrorData({message: "Trebuiesc completate toate câmpurile."})
-            data.first_name = "";
-            data.last_name = "";
-            data.username = "";
-            data.email = "";
-            data.password = "";
-            data.password_confirm = "";
-            Array.from(document.querySelectorAll("input")).forEach(
+
+            /*Array.from(document.querySelectorAll("input")).forEach(
                 input => (input.value = "")
-            );
+            );*/
         }
     }
 

@@ -8,6 +8,8 @@ import {FormControl, FormControlLabel, Paper, Popper, Radio, RadioGroup, Textare
 import {Email} from "@mui/icons-material";
 import {DataGrid} from '@mui/x-data-grid';
 import PropTypes from "prop-types";
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export default function Admin() {
 
@@ -212,7 +214,7 @@ export default function Admin() {
             renderCell: renderCellExpand,
         },
     ]
-    
+
     const [pendingResponsesRows, setPendingResponsesRows] = useState([]);
     let pendingResponsesColumns = [
         {
@@ -290,7 +292,7 @@ export default function Admin() {
     }
 
     const GridCellExpand = React.memo(function GridCellExpand(props) {
-        const { width, value } = props;
+        const {width, value} = props;
         const wrapper = React.useRef(null);
         const cellDiv = React.useRef(null);
         const cellValue = React.useRef(null);
@@ -354,7 +356,7 @@ export default function Admin() {
                 />
                 <Box
                     ref={cellValue}
-                    sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                    sx={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
                 >
                     {value}
                 </Box>
@@ -362,13 +364,13 @@ export default function Admin() {
                     <Popper
                         open={showFullCell && anchorEl !== null}
                         anchorEl={anchorEl}
-                        style={{ width, marginLeft: -17 }}
+                        style={{width, marginLeft: -17}}
                     >
                         <Paper
                             elevation={1}
-                            style={{ minHeight: wrapper.current.offsetHeight - 3 }}
+                            style={{minHeight: wrapper.current.offsetHeight - 3}}
                         >
-                            <Typography variant="body2" style={{ padding: 8 }}>
+                            <Typography variant="body2" style={{padding: 8}}>
                                 {value}
                             </Typography>
                         </Paper>
@@ -385,10 +387,10 @@ export default function Admin() {
 
     function renderCellExpand(params) {
         return (
-            <GridCellExpand value={params.value || ''} width={params.colDef.computedWidth} />
+            <GridCellExpand value={params.value || ''} width={params.colDef.computedWidth}/>
         );
     }
-    
+
     function getData() {
         const data = {
             jwt: localStorage.getItem("details")
@@ -440,8 +442,8 @@ export default function Admin() {
                 })
             })
     }
-    
-    function GetPendingResponses(){
+
+    function GetPendingResponses() {
         const requestOptions = {
             method: "GET"
         };
@@ -458,8 +460,8 @@ export default function Admin() {
                 console.log(error);
             });
     }
-    
-    function getPendingAdministratorRows(){
+
+    function getPendingAdministratorRows() {
         const requestOptions = {
             method: "GET"
         };
@@ -478,6 +480,7 @@ export default function Admin() {
                 console.log(error);
             });
     }
+
     useEffect(() => {
         getData();
         getUserDetails();
@@ -538,8 +541,8 @@ export default function Admin() {
                 console.log(error);
             });
     }
-    
-    function ownerAddAdmin(){
+
+    function ownerAddAdmin() {
         const data = {
             username: newAdministratorRequest.name
         }
@@ -560,12 +563,12 @@ export default function Admin() {
                 setNewAdministratorRequest({name: ""})
             })
     }
-    
+
     const handleAddAdministrator = e => {
         e.preventDefault();
         console.log(newAdministratorRequest.name);
         console.log(newAdministratorRequestSpecifications.message);
-        if(newAdministratorRequest.name === ""){
+        if (newAdministratorRequest.name === "") {
             setErrorData({message: "Trebuie sa introduci numele."})
             Array.from(document.querySelectorAll("input")).forEach(
                 input => (input.value = "")
@@ -586,15 +589,15 @@ export default function Admin() {
             }
         }
     }
-    
+
     const handleAddAdministratorByOwner = e => {
         e.preventDefault();
         console.log(newAdministratorRequest.name);
-        if(newAdministratorRequest.name === ""){
+        if (newAdministratorRequest.name === "") {
             setErrorData({message: "Campul nu are voie sa fie gol!"})
-        } else if(newAdministratorRequest.name === username.name){
+        } else if (newAdministratorRequest.name === username.name) {
             setErrorData({message: "Nu te poti propune pe tine!"})
-        } else{
+        } else {
             ownerAddAdmin();
             Array.from(document.querySelectorAll("input")).forEach(
                 input => (input.value = "")
@@ -630,12 +633,13 @@ export default function Admin() {
 
     }
 
-    function AcceptTrainingQuestion(id, question, var1, var2, var3, var4, varcorrect, email) {
+    function AcceptTrainingEasyMediumQuestion(id, question, var1, var2, var3, var4, varcorrect, email, difficulty) {
         console.log(id)
 
         const data = {
             question_id: id,
             question: question,
+            difficulty: difficulty,
             var_1: var1,
             var_2: var2,
             var_3: var3,
@@ -646,7 +650,7 @@ export default function Admin() {
             method: "POST",
             body: JSON.stringify(data)
         }
-        let input = IPv4 + "/Licenta/models/AdminConfirmPendingTrainingQueries.php"
+        let input = IPv4 + "/Licenta/models/AdminConfirmPendingEasyMediumTrainingQueries.php"
         fetch(
             input,
             requestOptions
@@ -660,6 +664,36 @@ export default function Admin() {
             });
         AddUserPoints(email);
     }
+
+    function AcceptTrainingHardQuestion(id, question, varcorrect, email, difficulty) {
+        console.log(id)
+
+        const data = {
+            question_id: id,
+            question: question,
+            difficulty: difficulty,
+            correct_answer: varcorrect
+        }
+        const requestOptions = {
+            method: "POST",
+            body: JSON.stringify(data)
+        }
+        let input = IPv4 + "/Licenta/models/AdminConfirmPendingHardTrainingQueries.php"
+        fetch(
+            input,
+            requestOptions
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        AddUserPoints(email);
+    }
+    
+    
 
     function DeleteTrainingQuestion(id) {
         const data = {
@@ -683,8 +717,8 @@ export default function Admin() {
             });
 
     }
-    
-    function AcceptAdminRequest(id){
+
+    function AcceptAdminRequest(id) {
         const data = {
             request_id: id,
         }
@@ -705,8 +739,8 @@ export default function Admin() {
                 console.log(error);
             });
     }
-    
-    function DeleteAdminRequest(id){
+
+    function DeleteAdminRequest(id) {
         const data = {
             request_id: id,
         }
@@ -727,8 +761,8 @@ export default function Admin() {
                 console.log(error);
             });
     }
-    
-    function AcceptPendingResponse(id){
+
+    function AcceptPendingResponse(id) {
         const data = {
             pending_response_id: id,
         }
@@ -749,8 +783,8 @@ export default function Admin() {
                 console.log(error);
             });
     }
-    
-    function DeletePendingResponse(id){
+
+    function DeletePendingResponse(id) {
         const data = {
             pending_response_id: id,
         }
@@ -771,7 +805,8 @@ export default function Admin() {
                 console.log(error);
             });
     }
-    const handleOnCellClick = (params) => {
+
+    /*const handleOnCellClick = (params) => {
         if (params.field === 'acceptQuestion') {
             rows.map((item) => {
                 if (item["id"] === params.id) {
@@ -787,49 +822,90 @@ export default function Admin() {
         }
 
         //console.log(params.id, params.field, params.value);
-    };
-    
-    const handleAdministratorRequestOnCellClick = (params) => {
-        if(params.field === 'acceptRequestAdministrator'){
-            pendingAdministratorRows.map((item) => {
-                if(item["id"] === params.id){
-                    AcceptAdminRequest(params.id);
-                    console.log(params.id);
-                }
-            })
-            
-        }else {
-            if (params.field === 'deleteRequestAdministrator') {
-                DeleteAdminRequest(params.id);
+    };*/
+
+    const handleOnCellClick = (row, action) => {
+        if (action === 'accept') {
+            if(row["difficulty"] !== "hard") {
+                AcceptTrainingEasyMediumQuestion(row["id"], row["question"], row["var1"], row["var2"], row["var3"], row["var4"], row["varcorrect"], row["email"], row["difficulty"])
+                console.log(row["id"], row["question"], row["var1"], row["var2"], row["var3"], row["var4"], row["varcorrect"], row["email"])
+            }else{
+                AcceptTrainingHardQuestion(row["id"], row["question"], row["varcorrect"], row["email"], row["difficulty"]);
+            }
+
+        } else {
+            if (action === 'delete') {
+                DeleteTrainingQuestion(row["id"])
             }
         }
 
         //console.log(params.id, params.field, params.value);
     };
 
-    const handleOnCellClickResponses = (params) => {
-        if(params.field === 'acceptPendingResponse'){
+    /*const handleAdministratorRequestOnCellClick = (params) => {
+        if (params.field === 'acceptRequestAdministrator') {
             pendingAdministratorRows.map((item) => {
-                if(item["id"] === params.id){
+                if (item["id"] === params.id) {
+                    AcceptAdminRequest(params.id);
+                    console.log(params.id);
+                }
+            })
+
+        } else {
+            if (params.field === 'deleteRequestAdministrator') {
+                DeleteAdminRequest(params.id);
+            }
+        }
+
+        //console.log(params.id, params.field, params.value);
+    };*/
+
+    const handleAdministratorRequestOnCellClick = (row, action) => {
+        if (action === 'accept') {
+                    AcceptAdminRequest(row.id);
+                    console.log(row.id);
+        } else {
+            if (action === 'delete') {
+                DeleteAdminRequest(row.id);
+            }
+        }
+    };
+
+    /*const handleOnCellClickResponses = (params) => {
+        if (params.field === 'acceptPendingResponse') {
+            pendingAdministratorRows.map((item) => {
+                if (item["id"] === params.id) {
                     AcceptPendingResponse(params.id);
                     console.log(params.id);
                 }
             })
 
-        }else {
+        } else {
             if (params.field === 'deletePendingResponse') {
                 DeletePendingResponse(params.id);
             }
         }
+    }*/
+
+    const handleOnCellClickResponses = (row, action) => {
+        if (action === 'accept') {
+                    AcceptPendingResponse(row["id"]);
+                    console.log(row["id"]);
+        } else {
+            if (action === 'delete') {
+                DeletePendingResponse(row["id"]);
+            }
+        }
     }
+    
     return (
         <div>
-            {userGrade.grade === "administrator" && <h2 id="h2Title">Admin page</h2>}
-            {userGrade.grade === "owner" && <h2 id="h2Title">Owner page</h2>}
+            {userGrade.grade === "administrator" && <h2 id="h2Title">Pagină admin</h2>}
+            {userGrade.grade === "owner" && <h2 id="h2Title">Pagină owner</h2>}
             <div>
                 <div className="formulary">
                     <div id="formularyChild">
-                        <p id="title">Number of users</p>
+                        <p id="title">Număr utilizatori</p>
                         <TextField
                             disabled
                             id="outlined-disabled"
@@ -842,7 +918,7 @@ export default function Admin() {
                         />
                     </div>
                     <div id="formularyChild">
-                        <p id="title">Your Grade</p>
+                        <p id="title">Gradul tău</p>
                         <TextField
                             disabled
                             id="outlined-disabled"
@@ -861,26 +937,28 @@ export default function Admin() {
                 <div id="addAdministratorChild">
                     <form onSubmit={handleAddAdministrator}>
                         <p id="title">Propune un administrator</p>
-                        <div>
+                        <div style={{display: "flex", justifyContent: "center"}} >
                             <TextField
                                 id="standard-required"
-                                label={"Write here the username"}
+                                label={"Scrie aici username"}
                                 variant="standard"
                                 style={{width: 300}}
                                 onChange={e => newAdministratorRequest.name = e.target.value}
                             />
                         </div>
-                        <div>
-                            <p id="title">Specificatii</p>
+                        <div >
+                            <p id="title">Specificații</p>
+                            <div style={{display: "flex", justifyContent: "center"}} >
                             <TextareaAutosize
                                 id="id-specifications"
                                 aria-label="empty textarea"
-                                placeholder="Write here your specifications"
+                                placeholder="Scrie aici specificațiile"
                                 minRows={2}
-                                style={{width: 300}}
+                                style={{width: 250}}
                                 value={newAdministratorRequestSpecifications.message}
                                 onChange={e => setNewAdministratorRequestSpecifications({message: e.target.value})}
                             />
+                            </div>
                         </div>
                         <div className="buttonLogin" id="childChangeDetails">
                             <button className="btn btn-primary btn-block">Submit</button>
@@ -897,13 +975,13 @@ export default function Admin() {
                     <div id="addAdministratorChild">
                         <form onSubmit={handleAddAdministratorByOwner}>
                             <p id="title">Adaugă un administrator</p>
-                            <div>
+                            <div className="divAddAdministrator">
                                 <TextField
                                     id="standard-required"
                                     label={"Write here the username"}
                                     variant="standard"
-                                    style={{width: 300}}
-                                    value = {newAdministratorRequest.name}
+                                    style={{width: "auto"}}
+                                    value={newAdministratorRequest.name}
                                     onChange={e => setNewAdministratorRequest.name = e.target.value}
                                 />
                             </div>
@@ -920,7 +998,7 @@ export default function Admin() {
 
             <div className="container">
                 <h1>Întrebări în așteptare</h1>
-                <div style={{height: 400, width: '100%'}}>
+                {/*<div style={{height: 400, width: '100%'}}>
                     <Box
                         sx={{
                             height: 300,
@@ -946,11 +1024,62 @@ export default function Admin() {
                             onCellClick={handleOnCellClick}
                         />
                     </Box>
+                </div>*/}
+                <div className="pendingQuestions">
+                    <div className="pendingQuestionsRow">
+                        <span className="pendingQuestionsCell" style={{width: "45%", background: "deepskyblue", textAlign: "center"}}>Întrebare</span>
+                        <span className="pendingQuestionsCell" style={{width: "20%", background: "deepskyblue", textAlign: "center"}}>Dificultate</span>
+                        <span className="pendingQuestionsCell" style={{width: "35%", background: "deepskyblue", textAlign: "center"}}>User</span>
+                    </div>
+                    {rows.map((row) => {
+                        return <div key={row.id} style={{display: "flex", justifyContent: "center", flexDirection: "column", width: "100%", alignItems: "center" }}>
+                            <div className="pendingQuestionsRow" onClick={() => {
+                                document.getElementById("questionResponses" + row["id"]).style.display = document.getElementById("questionResponses" + row["id"]).style.display === "flex" ? "none" : "flex"
+                            }}>
+                                <span className="pendingQuestionsCell" style={{width: "45%"}}>{row.question}</span>
+                                <span className="pendingQuestionsCell" style={{width: "20%", textAlign: "center"}}>{row.difficulty}</span>
+                                <span className="pendingQuestionsCell" style={{width: "35%", textAlign: "center"}}>{row.user}</span>
+                            </div>
+                            <div id={"questionResponses" + row["id"]}>
+                                {row.var1 && <div className="pendingQuestionsRow">
+                                    <span className="pendingQuestionsCell" style={{width: "22%", background: "deepskyblue", textAlign: "center"}}>var_1</span>
+                                    <span className="pendingQuestionsCell" style={{width: "78%"}}>{row.var1}</span>
+                                </div>}
+                                {row.var2 && <div className="pendingQuestionsRow">
+                                    <span className="pendingQuestionsCell" style={{width: "22%", background: "deepskyblue", textAlign: "center"}}>var_2</span>
+                                    <span className="pendingQuestionsCell" style={{width: "78%"}}>{row.var2}</span>
+                                </div>}
+                                {row.var3 && <div className="pendingQuestionsRow">
+                                    <span className="pendingQuestionsCell" style={{width: "22%", background: "deepskyblue", textAlign: "center"}}>var_3</span>
+                                    <span className="pendingQuestionsCell" style={{width: "78%"}}>{row.var3}</span>
+                                </div>}
+                                {row.var4 && <div className="pendingQuestionsRow">
+                                    <span className="pendingQuestionsCell" style={{width: "22%", background: "deepskyblue", textAlign: "center"}}>var_4</span>
+                                    <span className="pendingQuestionsCell" style={{width: "78%"}}>{row.var4}</span>
+                                </div>}
+                                <div className="pendingQuestionsRow">
+                                    <span className="pendingQuestionsCell" style={{width: "22%", background: "deepskyblue", textAlign: "center"}}>corect</span> 
+                                    <span className="pendingQuestionsCell" style={{width: "78%"}}>{row.varcorrect}</span>
+                                </div>
+                                <div className="pendingQuestionsRow">
+                                    <span className="pendingQuestionsCell" style={{width: "70%", background: "#0dcaf0", textAlign: "center"}}>Acceptă/Respinge</span>
+                                    <div style={{display: "flex", width: "30%"}}>
+                                        <span className="pendingQuestionsCell" onClick={()=>handleOnCellClick(row, 'accept')} style={{ textAlign: "center", width: "50%", backgroundColor: 'rgba(157, 255, 118, 0.49)'}}><CheckBoxIcon style={{ color: "darkgreen"}}/></span>
+                                        <span className="pendingQuestionsCell" onClick={()=>handleOnCellClick(row, 'delete')} style={{ textAlign: "center", width: "50%", backgroundColor: '#d47483'}}><ClearIcon style={{ color: "darkred"}}/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    })
+                    }
+
+
                 </div>
             </div>
             {userGrade.grade === "owner" && <div className="container">
                 <h1>Cereri de administrator</h1>
-                <div style={{height: 400, width: '100%'}}>
+                {/*<div style={{height: 400, width: '100%'}}>
                     <Box
                         sx={{
                             height: 300,
@@ -976,12 +1105,49 @@ export default function Admin() {
                             onCellClick={handleAdministratorRequestOnCellClick}
                         />
                     </Box>
+                </div>*/}
+                
+                <div className="pendingAdminRequests">
+                    <div className="pendingAdminsRow">
+                        <span className="pendingAdminsCell" style={{width: "25%", background: "deepskyblue", textAlign: "center"}}>User</span>
+                        <span className="pendingAdminsCell" style={{width: "25%", background: "deepskyblue", textAlign: "center"}}>Email</span>
+                        <span className="pendingAdminsCell" style={{width: "25%", background: "deepskyblue", textAlign: "center"}}>User propunător</span>
+                        <span className="pendingAdminsCell" style={{width: "25%", background: "deepskyblue", textAlign: "center"}}>Email propunător</span>
+                    </div>
+                    {pendingAdministratorRows.map((row) => {
+                        return <div key={row.id} style={{display: "flex", justifyContent: "center", flexDirection: "column", width: "100%", alignItems: "center" }}>
+                            <div className="pendingAdminsRow" onClick={() => {
+                                document.getElementById("adminDetails" + row["id"]).style.display = document.getElementById("adminDetails" + row["id"]).style.display === "flex" ? "none" : "flex"
+                            }}>
+                                <span className="pendingAdminsCell" style={{width: "25%"}}>{row.username}</span>
+                                <span className="pendingAdminsCell" style={{width: "25%"}}>{row.email}</span>
+                                <span className="pendingAdminsCell" style={{width: "25%"}}>{row.who_proposed_username}</span>
+                                <span className="pendingAdminsCell" style={{width: "25%"}}>{row.who_proposed_email}</span>
+                            </div>
+                            <div id={"adminDetails" + row["id"]}>
+                                <div className="pendingAdminsRow">
+                                    <span className="pendingAdminsCell" style={{width: "35%", background: "deepskyblue", textAlign: "center"}}>Specificații</span>
+                                    <span className="pendingAdminsCell" style={{width: "65%"}}>{row.specifications}</span>
+                                </div>
+                                <div className="pendingAdminsRow">
+                                    <span className="pendingAdminsCell" style={{width: "70%", background: "#0dcaf0", textAlign: "center"}}>Acceptă/Respinge</span>
+                                    <div style={{display: "flex", width: "30%"}}>
+                                        <span className="pendingAdminsCell" onClick={()=>{handleAdministratorRequestOnCellClick(row, 'accept')}} style={{ textAlign: "center", width: "50%", backgroundColor: 'rgba(157, 255, 118, 0.49)'}}><CheckBoxIcon style={{ color: "darkgreen"}}/></span>
+                                        <span className="pendingAdminsCell" onClick={()=>{handleAdministratorRequestOnCellClick(row, 'delete')}} style={{ textAlign: "center", width: "50%", backgroundColor: '#d47483'}}><ClearIcon style={{ color: "darkred"}}/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    })
+                    }
                 </div>
+                
             </div>}
 
             <div className="container">
                 <h1>Răspunsuri greșite în așteptare</h1>
-                <div style={{height: 400, width: '100%'}}>
+                {/*<div style={{height: 400, width: '100%'}}>
                     <Box
                         sx={{
                             height: 300,
@@ -1007,9 +1173,41 @@ export default function Admin() {
                             onCellClick={handleOnCellClickResponses}
                         />
                     </Box>
+                </div>*/}
+
+                <div className="pendingResponses">
+                    <div className="pendingResponsesRow">
+                        <span className="pendingResponsesCell" style={{width: "45%", background: "deepskyblue", textAlign: "center"}}>Întrebare</span>
+                        <span className="pendingResponsesCell" style={{width: "38%", background: "deepskyblue", textAlign: "center"}}>Răspuns</span>
+                        <span className="pendingResponsesCell" style={{width: "17%", background: "deepskyblue", textAlign: "center"}}>Dificultate</span>
+                    </div>
+                    {pendingResponsesRows.map((row) => {
+                        return <div key={row.id} style={{display: "flex", justifyContent: "center", flexDirection: "column", width: "100%", alignItems: "center" }}>
+                            <div className="pendingResponsesRow" onClick={() => {
+                                document.getElementById("hardResponses" + row["id"]).style.display = document.getElementById("hardResponses" + row["id"]).style.display === "flex" ? "none" : "flex"
+                            }}>
+                                <span className="pendingResponsesCell" style={{width: "45%"}}>{row.question}</span>
+                                <span className="pendingResponsesCell" style={{width: "38%"}}>{row.response}</span>
+                                <span className="pendingResponsesCell" style={{width: "17%"}}>{row.difficulty}</span>
+                            </div>
+                            <div id={"hardResponses" + row["id"]}>
+                                <div className="pendingResponsesRow">
+                                    <span className="pendingResponsesCell" style={{width: "70%", background: "#0dcaf0", textAlign: "center"}}>Acceptă/Respinge</span>
+                                    <div style={{display: "flex", width: "30%"}}>
+                                        <span className="pendingResponsesCell" onClick={()=>handleOnCellClickResponses(row, 'accept')} style={{ textAlign: "center", width: "50%", backgroundColor: 'rgba(157, 255, 118, 0.49)'}}><CheckBoxIcon style={{ color: "darkgreen"}}/></span>
+                                        <span className="pendingResponsesCell" onClick={()=>handleOnCellClickResponses(row, 'delete')} style={{ textAlign: "center", width: "50%", backgroundColor: '#d47483'}}><ClearIcon style={{ color: "darkred"}}/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    })
+                    }
+
+
                 </div>
             </div>
-            
+
         </div>
     )
 }

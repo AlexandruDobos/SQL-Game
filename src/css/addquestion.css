@@ -40,10 +40,15 @@ p{
     justify-content: center;
 }
 .itemCenterContent{
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+form{
+    width: 100%;
 }
 
 .imagePhoto{
@@ -57,4 +62,55 @@ p{
 
 #questionTitle{
     text-align: center;
+}
+
+#divForMobileImage{
+    display: none;
+}
+
+.elemForVariants{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+@media all and (max-width: 425px) {
+    
+    .mainContent{
+        width: 100%;
+    }
+
+    .textForQuestion{
+        width: 100%;
+        font-size: 15px;
+    }
+    p{
+        font-size: 15px;
+    }
+
+    .topContentMenu{
+        width: 100%;
+    }
+
+    #divForImage{
+        display: none;
+    }
+
+    #divForMobileImage{
+        display: flex;
+    }
+    
+    .itemCenterContent{
+        width: 100%;
+    }
+    
+    form{
+        width: 100%;
+    }
+    
+    textarea #idVar1{
+        width: 100%;
+    }
+
 }

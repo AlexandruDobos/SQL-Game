@@ -1,4 +1,8 @@
-﻿.formulary{
+﻿.principal{
+    width: 100%;
+}
+
+.formulary{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -30,4 +34,59 @@
 
 .buttonSubmit{
     margin-bottom: 20px;
+}
+
+.divForChallengesTable{
+    width: 100%;
+}
+
+.challengesTable{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.challengesTableRow{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.challengesTableCell{
+    border: 1.5px solid #0d6efd;
+    border-collapse: collapse;
+    border-radius: 5px;
+    padding: 0.1rem;
+    text-align: center;
+}
+
+
+
+@media all and (max-width: 620px) {
+    
+    .formulary{
+        flex-direction: column;
+        justify-content: center;
+    }
+    #formularyChild{
+        
+    }
+    
+    .auth-inner{
+        padding: 10px;
+    }
+    
+    .onlyLaptop{
+        display: none;
+    }
+    
+    .challengesTableRow{
+        font-size: 13px;
+    }
+    
+    .challengesTableCell{
+        padding: 0;
+    }
+    
 }

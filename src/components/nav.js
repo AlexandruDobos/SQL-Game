@@ -11,7 +11,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import '../css/nav.css'
 import IPv4 from '../index';
-
+import MenuIcon from '@mui/icons-material/Menu';
+import IconButton from '@mui/material/IconButton';
 
 export default function Nav() {
 
@@ -22,6 +23,7 @@ export default function Nav() {
     const [points, setPoints] = useState({points: ""})
     const [token, setToken] = useState({token: localStorage.getItem("token")})
     const [challenges, setChallenges] = useState({value: 0})
+    const [open, setOpen] = useState(false);
 
     function GetUserPoints() {
         const dataPoints = {
@@ -116,10 +118,11 @@ export default function Nav() {
         window.location.reload();
     };
     let buttons;
+    let mobileButtons;
 
     if (state.user && isAdmin.isAdmin === "1") {
         buttons = (
-            <ul className="navigation">
+            <ul className="normalNavigation">
                 <li id="element">
                     <MonetizationOnIcon/>Points: {points.points}
                 </li>
@@ -140,9 +143,39 @@ export default function Nav() {
                 </li>
             </ul>
         )
+        mobileButtons = (
+            <div>
+                <ul className="mobileNavigation">
+                    <li id="mobileElement">
+                        <Link id="element" to={'/training'}>Exersează <AlarmOnIcon/></Link>
+                    </li>
+                    <li id="mobileElement">
+                        <Link id="element" to={'/game'}>Joacă <FireplaceIcon/></Link>
+                    </li>
+                    <li id="mobileElement">
+                        <div id="element"><MonetizationOnIcon/>Points: {points.points}</div>
+                    </li>
+                    <li id="mobileElement">
+                        <Link id="element" to={'/challenges'}><MailIcon/></Link>
+                    </li>
+                    <li id="mobileElement">
+                        <Link id="element" to={'/addquestion'}><AddCircleOutlineIcon/></Link>
+                    </li>
+                    <li id="mobileElement">
+                        <Link id="element" to={'/settings'}><SettingsIcon/></Link>
+                    </li>
+                    <li id="mobileElement">
+                        <Link id="element" to={'/admin'}><AdminPanelSettingsIcon/></Link>
+                    </li>
+                    <li id="mobileElement">
+                        <Link id="element" to={'/'} onClick={handleLogout}>Logout<LogoutIcon/></Link>
+                    </li>
+                </ul>
+            </div>
+        )
     } else if (state.user) {
         buttons = (
-            <ul className="navigation">
+            <ul className="normalNavigation">
                 <li id="element">
                     Points: {points.points}
                 </li>
@@ -160,9 +193,44 @@ export default function Nav() {
                 </li>
             </ul>
         )
+        mobileButtons = (
+            <ul className="mobileNavigation">
+                <li id="mobileElement">
+                    <Link id="element" to={'/training'}>Exersează <AlarmOnIcon/></Link>
+                </li>
+                <li id="mobileElement">
+                    <Link id="element" to={'/game'}>Joacă <FireplaceIcon/></Link>
+                </li>
+                <li id="mobileElement">
+                    Points: {points.points}
+                </li>
+                <li id="mobileElement">
+                    <Link id="element" to={'/challenges'}><MailIcon/></Link>
+                </li>
+                <li id="mobileElement">
+                    <Link id="element" to={'/addquestion'}><AddCircleOutlineIcon/></Link>
+                </li>
+                <li id="mobileElement">
+                    <Link id="element" to={'/settings'}><SettingsIcon/></Link>
+                </li>
+                <li id="mobileElement">
+                    <Link id="element" to={'/'} onClick={handleLogout}>Logout</Link>
+                </li>
+            </ul>
+        )
     } else {
         buttons = (
-            <ul className="navigation">
+            <ul className="normalNavigation">
+                <li>
+                    <Link id="element" to={'/login'}>Login</Link>
+                </li>
+                <li>
+                    <Link id="element" to={'/register'}>Sign up</Link>
+                </li>
+            </ul>
+        )
+        mobileButtons = (
+            <ul className="mobileNavigation">
                 <li>
                     <Link id="element" to={'/login'}>Login</Link>
                 </li>
@@ -172,17 +240,37 @@ export default function Nav() {
             </ul>
         )
     }
-    
+
+    const handleClick = e => {
+        //e.preventDefault();
+        setOpen(!open);
+    }
 
     return (
-            <div className="cont">
-                <nav className="navigation">
+        <div className="cont">
+            <nav className="navigation">
+                <div className="firstThreeElem">
                     <Link id="element" to={'/'}>Home <HomeIcon/></Link>
-                    {state.user && <Link id="element" to={'/training'}>Exersează <AlarmOnIcon/></Link>}
-                    {state.user && <Link id="element" to={'/game'}>Joacă <FireplaceIcon/></Link>}
-                    {buttons}
-                </nav>
-            </div>
+                    {state.user &&
+                    <Link className="dontShowOnMobile" id="element" to={'/training'}>Exersează <AlarmOnIcon/></Link>}
+                    {state.user &&
+                    <Link className="dontShowOnMobile" id="element" to={'/game'}>Joacă <FireplaceIcon/></Link>}
+                </div>
+                {buttons}
+                <div className="mobileMenu">
+                    <IconButton
+                        id="long-button"
+                        onClick={handleClick}
+                        sx={{color: "white"}}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                </div>
+            </nav>
+            <nav className="navigation navigationMobileMenu">
+                {open && mobileButtons}
+            </nav>
+        </div>
     )
 
 }

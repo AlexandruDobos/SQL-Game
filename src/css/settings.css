@@ -28,7 +28,7 @@
     text-align: center;
 }
 
-#h2Title{
+#pTitle{
     text-align: center;
     font-size: 48px;
     color: white;
@@ -81,4 +81,18 @@ body, html, .App, #root, .auth-wrapper {
     display: flex;
     justify-content: center;
     margin-top: 5%;
+}
+
+@media all and (max-width: 425px) {
+
+    #pTitle{
+        font-size: 25px;
+    }
+    
+    .formulary #formularyChild{
+        width: 100%;
+    }
+    
+    
+    
 }

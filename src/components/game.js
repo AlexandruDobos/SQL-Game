@@ -16,6 +16,7 @@ import {type} from "@testing-library/user-event/dist/type";
 import Typography from "@mui/material/Typography";
 import diagram from "../images/structura_tabele.svg";
 import TimerIcon from "@mui/icons-material/Timer";
+import diagram_mobile from "../images/diagrama_tabele_telefon.svg";
 
 export default function Game() {
 
@@ -85,6 +86,7 @@ export default function Game() {
     const [seconds, setSeconds] = useState(5);
     const [expiredTime, setIsExpiredTime] = useState({value: "false"})
     const [variable, setVariable] = useState(0)
+
     function decodeJWT() {
         if (localStorage.getItem("token")) {
             const data = {
@@ -212,7 +214,7 @@ export default function Game() {
     }
 
     function GoToAddQuestionPage() {
-        window.location.href = '/addquestion.js'
+        window.location.href = '/addquestion'
     }
 
     function ClickedOrder() {
@@ -332,9 +334,9 @@ export default function Game() {
     }
 
     function checkHardQuestion1(userResponse) {
-        if(userResponse === ""){
+        if (userResponse === "") {
             setHardNumberOfEmptyResponses(hardNumberOfEmptyResponses + 1)
-        }else {
+        } else {
             console.log(userResponse);
             const data = {
                 correct_answer: hardQuestions[0]["response"],
@@ -364,9 +366,9 @@ export default function Game() {
     }
 
     function checkHardQuestion2(userResponse) {
-        if(userResponse === ""){
+        if (userResponse === "") {
             setHardNumberOfEmptyResponses(hardNumberOfEmptyResponses + 1)
-        }else {
+        } else {
             console.log(userResponse);
             const data = {
                 correct_answer: hardQuestions[1]["response"],
@@ -396,9 +398,9 @@ export default function Game() {
     }
 
     function checkHardQuestion3(userResponse) {
-        if(userResponse === ""){
+        if (userResponse === "") {
             setHardNumberOfEmptyResponses(hardNumberOfEmptyResponses + 1)
-        }else {
+        } else {
             console.log(userResponse);
             const data = {
                 correct_answer: hardQuestions[2]["response"],
@@ -427,11 +429,11 @@ export default function Game() {
                 })
         }
     }
-    
-    function CreateStatisticsForHardQuestion(){
+
+    function CreateStatisticsForHardQuestion() {
         setVariable(variable + 1)
         let index = 0;
-        if(index === 0) {
+        if (index === 0) {
             //console.log("Indexul este: ", index)
             if (hardQuestion1ResponseValue === true) {
                 setHardNumberOfCorrectResponses(hardNumberOfCorrectResponses + 1);
@@ -440,7 +442,7 @@ export default function Game() {
             }
             index++;
         }
-        if(index === 1) {
+        if (index === 1) {
             //console.log("Indexul este: ", index)
             if (hardQuestion2ResponseValue === true) {
                 setHardNumberOfCorrectResponses(hardNumberOfCorrectResponses + 1);
@@ -449,7 +451,7 @@ export default function Game() {
             }
             index++;
         }
-        if(index === 2) {
+        if (index === 2) {
             //console.log("Indexul este: ", index)
             if (hardQuestion3ResponseValue === true) {
                 setHardNumberOfCorrectResponses(hardNumberOfCorrectResponses + 1);
@@ -606,49 +608,49 @@ export default function Game() {
                 checkHardQuestion2(hardQuestionResponse2.answer)
                 index++;
             }
-            if(index === 2){
-            checkHardQuestion3(hardQuestionResponse3.answer)
+            if (index === 2) {
+                checkHardQuestion3(hardQuestionResponse3.answer)
                 index++;
             }
-            
-            if(index === 3){
+
+            if (index === 3) {
                 CreateStatisticsForHardQuestion();
             }
 
             console.log(index);
-            
+
         }
 
     }
 
     React.useEffect(() => {
-        if(hardQuestion1ResponseValue === true || hardQuestion2ResponseValue === true || hardQuestion3ResponseValue === true) {
+        if (hardQuestion1ResponseValue === true || hardQuestion2ResponseValue === true || hardQuestion3ResponseValue === true) {
             CreateStatisticsForHardQuestion();
         }
         //console.log("variable este: ", variable)
-        
+
     }, [hardQuestion1ResponseValue, hardQuestion2ResponseValue, hardQuestion3ResponseValue])
 
     React.useEffect(() => {
-        if(hardQuestion1ResponseValue === false || hardQuestion2ResponseValue === false || hardQuestion3ResponseValue === false) {
-            if(hardQuestion1ResponseValue === false){
+        if (hardQuestion1ResponseValue === false || hardQuestion2ResponseValue === false || hardQuestion3ResponseValue === false) {
+            if (hardQuestion1ResponseValue === false) {
                 setHardNumberOfWrongResponses(hardNumberOfWrongResponses + 1);
                 setHardQuestion1ResponseValue()
             }
-            if(hardQuestion2ResponseValue === false){
+            if (hardQuestion2ResponseValue === false) {
                 setHardNumberOfWrongResponses(hardNumberOfWrongResponses + 1);
                 setHardQuestion2ResponseValue()
             }
-            if(hardQuestion3ResponseValue === false){
+            if (hardQuestion3ResponseValue === false) {
                 setHardNumberOfWrongResponses(hardNumberOfWrongResponses + 1);
                 setHardQuestion3ResponseValue()
             }
         }
         //console.log("variable este: ", variable)
-        if(hardQuestion1ResponseValue !== true && hardQuestion1ResponseValue !== false &&
+        if (hardQuestion1ResponseValue !== true && hardQuestion1ResponseValue !== false &&
             hardQuestion2ResponseValue !== true && hardQuestion2ResponseValue !== false &&
-            hardQuestion3ResponseValue !== true && hardQuestion3ResponseValue !== false){
-            changePoints("add", hardNumberOfCorrectResponses * (numberOfPointsCanYouWin.value/3))
+            hardQuestion3ResponseValue !== true && hardQuestion3ResponseValue !== false) {
+            changePoints("add", hardNumberOfCorrectResponses * (numberOfPointsCanYouWin.value / 3))
         }
     }, [hardQuestion1ResponseValue, hardQuestion2ResponseValue, hardQuestion3ResponseValue])
 
@@ -668,12 +670,26 @@ export default function Game() {
                 div.appendChild(img);
                 //div.appendChild(img);
                 setIsImageCreate({value: "true"})
+
+                let img2 = document.createElement("img");
+                img2.src = diagram_mobile;
+                let firstDiv2 = document.getElementById('diagramImage');
+                let divForImage2 = document.createElement('div');
+                divForImage2.id = "divForMobileImage";
+                firstDiv2.append(divForImage2);
+                let div2 = document.getElementById("divForMobileImage");
+                div2.appendChild(img2);
+                setIsImageCreate({value: "true"});
             }
         } else {
             setIsDisplayImage({value: "false"})
             if (isImageCreate.value === "true") {
                 let element = document.getElementById("divForImage");
                 element.remove();
+                setIsImageCreate({value: "false"})
+
+                let element2 = document.getElementById("divForMobileImage");
+                element2.remove();
                 setIsImageCreate({value: "false"})
             }
             setTextForImageButton({value: "Afișează diagrama bazei de date!"})
@@ -693,7 +709,7 @@ export default function Game() {
     }, [seconds]);
 
     return (
-        <div>
+        <div className="principal">
             <div className="title">
                 <h2>{username.username} Test Page</h2>
             </div>
@@ -791,20 +807,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{easyQuestions[0]["question"]}</p>
-                                                    <FormControlLabel checked={checked0.var_1} value="question0_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked0.var_1} value="question0_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[0]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked0.var_2} value="question0_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked0.var_2} value="question0_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[0]["var_2"]}/>
-                                                    <FormControlLabel checked={checked0.var_3} value="question0_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked0.var_3} value="question0_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[0]["var_3"]}/>
-                                                    <FormControlLabel checked={checked0.var_4} value="question0_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked0.var_4} value="question0_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[0]["var_4"]}/>
@@ -823,26 +843,30 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{easyQuestions[1]["question"]}</p>
-                                                    <FormControlLabel checked={checked1.var_1} value="question1_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked1.var_1} value="question1_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[1]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked1.var_2} value="question1_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked1.var_2} value="question1_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[1]["var_2"]}/>
-                                                    <FormControlLabel checked={checked1.var_3} value="question1_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked1.var_3} value="question1_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[1]["var_3"]}/>
-                                                    <FormControlLabel checked={checked1.var_4} value="question1_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked1.var_4} value="question1_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[1]["var_4"]}/>
                                                 </RadioGroup>
                                             </FormControl>
-                                        </Paper >
+                                        </Paper>
                                     </div>
                                     <div className="classForPaper">
                                         <Paper className="paper">
@@ -855,20 +879,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{easyQuestions[2]["question"]}</p>
-                                                    <FormControlLabel checked={checked2.var_1} value="question2_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked2.var_1} value="question2_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[2]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked2.var_2} value="question2_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked2.var_2} value="question2_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[2]["var_2"]}/>
-                                                    <FormControlLabel checked={checked2.var_3} value="question2_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked2.var_3} value="question2_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[2]["var_3"]}/>
-                                                    <FormControlLabel checked={checked2.var_4} value="question2_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked2.var_4} value="question2_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[2]["var_4"]}/>
@@ -887,20 +915,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{easyQuestions[3]["question"]}</p>
-                                                    <FormControlLabel checked={checked3.var_1} value="question3_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked3.var_1} value="question3_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[3]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked3.var_2} value="question3_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked3.var_2} value="question3_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[3]["var_2"]}/>
-                                                    <FormControlLabel checked={checked3.var_3} value="question3_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked3.var_3} value="question3_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[3]["var_3"]}/>
-                                                    <FormControlLabel checked={checked3.var_4} value="question3_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked3.var_4} value="question3_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[3]["var_4"]}/>
@@ -919,20 +951,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{easyQuestions[4]["question"]}</p>
-                                                    <FormControlLabel checked={checked4.var_1} value="question4_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked4.var_1} value="question4_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[4]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked4.var_2} value="question4_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked4.var_2} value="question4_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[4]["var_2"]}/>
-                                                    <FormControlLabel checked={checked4.var_3} value="question4_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked4.var_3} value="question4_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[4]["var_3"]}/>
-                                                    <FormControlLabel checked={checked4.var_4} value="question4_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked4.var_4} value="question4_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[4]["var_4"]}/>
@@ -951,20 +987,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{easyQuestions[5]["question"]}</p>
-                                                    <FormControlLabel checked={checked5.var_1} value="question5_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked5.var_1} value="question5_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[5]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked5.var_2} value="question5_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked5.var_2} value="question5_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[5]["var_2"]}/>
-                                                    <FormControlLabel checked={checked5.var_3} value="question5_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked5.var_3} value="question5_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[5]["var_3"]}/>
-                                                    <FormControlLabel checked={checked5.var_4} value="question5_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked5.var_4} value="question5_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[5]["var_4"]}/>
@@ -983,20 +1023,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{easyQuestions[6]["question"]}</p>
-                                                    <FormControlLabel checked={checked6.var_1} value="question6_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked6.var_1} value="question6_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[6]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked6.var_2} value="question6_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked6.var_2} value="question6_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[6]["var_2"]}/>
-                                                    <FormControlLabel checked={checked6.var_3} value="question6_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked6.var_3} value="question6_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[6]["var_3"]}/>
-                                                    <FormControlLabel checked={checked6.var_4} value="question6_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked6.var_4} value="question6_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[6]["var_4"]}/>
@@ -1015,20 +1059,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{easyQuestions[7]["question"]}</p>
-                                                    <FormControlLabel checked={checked7.var_1} value="question7_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked7.var_1} value="question7_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[7]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked7.var_2} value="question7_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked7.var_2} value="question7_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[7]["var_2"]}/>
-                                                    <FormControlLabel checked={checked7.var_3} value="question7_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked7.var_3} value="question7_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[7]["var_3"]}/>
-                                                    <FormControlLabel checked={checked7.var_4} value="question7_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked7.var_4} value="question7_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[7]["var_4"]}/>
@@ -1047,20 +1095,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{easyQuestions[8]["question"]}</p>
-                                                    <FormControlLabel checked={checked8.var_1} value="question8_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked8.var_1} value="question8_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[8]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked8.var_2} value="question8_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked8.var_2} value="question8_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[8]["var_2"]}/>
-                                                    <FormControlLabel checked={checked8.var_3} value="question8_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked8.var_3} value="question8_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[8]["var_3"]}/>
-                                                    <FormControlLabel checked={checked8.var_4} value="question8_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked8.var_4} value="question8_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[8]["var_4"]}/>
@@ -1079,20 +1131,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{easyQuestions[9]["question"]}</p>
-                                                    <FormControlLabel checked={checked9.var_1} value="question9_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked9.var_1} value="question9_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[9]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked9.var_2} value="question9_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked9.var_2} value="question9_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[9]["var_2"]}/>
-                                                    <FormControlLabel checked={checked9.var_3} value="question9_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked9.var_3} value="question9_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[9]["var_3"]}/>
-                                                    <FormControlLabel checked={checked9.var_4} value="question9_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked9.var_4} value="question9_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={easyQuestions[9]["var_4"]}/>
@@ -1138,20 +1194,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{mediumQuestions[0]["question"]}</p>
-                                                    <FormControlLabel checked={checked0.var_1} value="question0_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked0.var_1} value="question0_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[0]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked0.var_2} value="question0_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked0.var_2} value="question0_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[0]["var_2"]}/>
-                                                    <FormControlLabel checked={checked0.var_3} value="question0_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked0.var_3} value="question0_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[0]["var_3"]}/>
-                                                    <FormControlLabel checked={checked0.var_4} value="question0_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked0.var_4} value="question0_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[0]["var_4"]}/>
@@ -1170,20 +1230,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{mediumQuestions[1]["question"]}</p>
-                                                    <FormControlLabel checked={checked1.var_1} value="question1_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked1.var_1} value="question1_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[1]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked1.var_2} value="question1_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked1.var_2} value="question1_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[1]["var_2"]}/>
-                                                    <FormControlLabel checked={checked1.var_3} value="question1_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked1.var_3} value="question1_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[1]["var_3"]}/>
-                                                    <FormControlLabel checked={checked1.var_4} value="question1_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked1.var_4} value="question1_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[1]["var_4"]}/>
@@ -1202,20 +1266,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{mediumQuestions[2]["question"]}</p>
-                                                    <FormControlLabel checked={checked2.var_1} value="question2_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked2.var_1} value="question2_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[2]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked2.var_2} value="question2_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked2.var_2} value="question2_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[2]["var_2"]}/>
-                                                    <FormControlLabel checked={checked2.var_3} value="question2_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked2.var_3} value="question2_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[2]["var_3"]}/>
-                                                    <FormControlLabel checked={checked2.var_4} value="question2_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked2.var_4} value="question2_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[2]["var_4"]}/>
@@ -1234,20 +1302,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{mediumQuestions[3]["question"]}</p>
-                                                    <FormControlLabel checked={checked3.var_1} value="question3_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked3.var_1} value="question3_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[3]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked3.var_2} value="question3_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked3.var_2} value="question3_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[3]["var_2"]}/>
-                                                    <FormControlLabel checked={checked3.var_3} value="question3_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked3.var_3} value="question3_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[3]["var_3"]}/>
-                                                    <FormControlLabel checked={checked3.var_4} value="question3_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked3.var_4} value="question3_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[3]["var_4"]}/>
@@ -1266,20 +1338,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{mediumQuestions[4]["question"]}</p>
-                                                    <FormControlLabel checked={checked4.var_1} value="question4_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked4.var_1} value="question4_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[4]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked4.var_2} value="question4_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked4.var_2} value="question4_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[4]["var_2"]}/>
-                                                    <FormControlLabel checked={checked4.var_3} value="question4_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked4.var_3} value="question4_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[4]["var_3"]}/>
-                                                    <FormControlLabel checked={checked4.var_4} value="question4_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked4.var_4} value="question4_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[4]["var_4"]}/>
@@ -1298,20 +1374,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{mediumQuestions[5]["question"]}</p>
-                                                    <FormControlLabel checked={checked5.var_1} value="question5_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked5.var_1} value="question5_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[5]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked5.var_2} value="question5_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked5.var_2} value="question5_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[5]["var_2"]}/>
-                                                    <FormControlLabel checked={checked5.var_3} value="question5_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked5.var_3} value="question5_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[5]["var_3"]}/>
-                                                    <FormControlLabel checked={checked5.var_4} value="question5_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked5.var_4} value="question5_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[5]["var_4"]}/>
@@ -1330,20 +1410,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{mediumQuestions[6]["question"]}</p>
-                                                    <FormControlLabel checked={checked6.var_1} value="question6_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked6.var_1} value="question6_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[6]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked6.var_2} value="question6_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked6.var_2} value="question6_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[6]["var_2"]}/>
-                                                    <FormControlLabel checked={checked6.var_3} value="question6_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked6.var_3} value="question6_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[6]["var_3"]}/>
-                                                    <FormControlLabel checked={checked6.var_4} value="question6_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked6.var_4} value="question6_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[6]["var_4"]}/>
@@ -1362,20 +1446,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{mediumQuestions[7]["question"]}</p>
-                                                    <FormControlLabel checked={checked7.var_1} value="question7_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked7.var_1} value="question7_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[7]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked7.var_2} value="question7_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked7.var_2} value="question7_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[7]["var_2"]}/>
-                                                    <FormControlLabel checked={checked7.var_3} value="question7_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked7.var_3} value="question7_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[7]["var_3"]}/>
-                                                    <FormControlLabel checked={checked7.var_4} value="question7_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked7.var_4} value="question7_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[7]["var_4"]}/>
@@ -1394,20 +1482,24 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{mediumQuestions[8]["question"]}</p>
-                                                    <FormControlLabel checked={checked8.var_1} value="question8_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked8.var_1} value="question8_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[8]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked8.var_2} value="question8_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked8.var_2} value="question8_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[8]["var_2"]}/>
-                                                    <FormControlLabel checked={checked8.var_3} value="question8_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked8.var_3} value="question8_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[8]["var_3"]}/>
-                                                    <FormControlLabel checked={checked8.var_4} value="question8_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked8.var_4} value="question8_var_4"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[8]["var_4"]}/>
@@ -1426,21 +1518,28 @@ export default function Game() {
                                                     name="radio-buttons-group"
                                                 >
                                                     <p className="componentGameQuestion">{mediumQuestions[9]["question"]}</p>
-                                                    <FormControlLabel checked={checked9.var_1} value="question9_var_1"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked9.var_1} value="question9_var_1"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[9]["var_1"]}
                                                     />
-                                                    <FormControlLabel checked={checked9.var_2} value="question9_var_2"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked9.var_2} value="question9_var_2"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[9]["var_2"]}/>
-                                                    <FormControlLabel checked={checked9.var_3} value="question9_var_3"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked9.var_3} value="question9_var_3"
                                                                       control={<Radio/>}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[9]["var_3"]}/>
-                                                    <FormControlLabel checked={checked9.var_4} value="question9_var_4"
+                                                    <FormControlLabel className="responseVariant"
+                                                                      checked={checked9.var_4} value="question9_var_4"
                                                                       control={<Radio/>}
+                                                                      style={{
+                                                                          fontFamily: "source - code - pro, Menlo, Monaco, Consolas,  'Courier New', monospace !important"
+                                                                      }}
                                                                       onChange={handleChange}
                                                                       label={mediumQuestions[9]["var_4"]}/>
                                                 </RadioGroup>
@@ -1464,7 +1563,7 @@ export default function Game() {
                                     <div>
                                         <div className="classForPaper">
                                             <Paper className="paper">
-                                                <h2>{hardQuestions[0]["question"]}</h2>
+                                                <p id="textForQuestion">{hardQuestions[0]["question"]}</p>
                                                 <div className="classForTextArea">
                                                     <TextareaAutosize
                                                         id="idResponseQuestion1"
@@ -1480,7 +1579,7 @@ export default function Game() {
                                         </div>
                                         <div className="classForPaper">
                                             <Paper className="paper">
-                                                <h2>{hardQuestions[1]["question"]}</h2>
+                                                <p id="textForQuestion">{hardQuestions[1]["question"]}</p>
                                                 <div className="classForTextArea">
                                                     <TextareaAutosize
                                                         id="idResponseQuestion2"
@@ -1495,7 +1594,7 @@ export default function Game() {
                                         </div>
                                         <div className="classForPaper">
                                             <Paper className="paper">
-                                                <h2>{hardQuestions[2]["question"]}</h2>
+                                                <p id="textForQuestion">{hardQuestions[2]["question"]}</p>
                                                 <div className="classForTextArea">
                                                     <TextareaAutosize
                                                         id="idResponseQuestion3"
@@ -1543,10 +1642,12 @@ export default function Game() {
                                 Ai raspuns gresit la {hardNumberOfWrongResponses} intrebari!
                             </p>
                             <p id="pForFirstDiv">
-                                Ai lasat {3 - hardNumberOfCorrectResponses - hardNumberOfWrongResponses} intrebari fara raspuns!
+                                Ai lasat {3 - hardNumberOfCorrectResponses - hardNumberOfWrongResponses} intrebari fara
+                                raspuns!
                             </p>
                             <p id="pForFirstDiv">
-                                Ai obtinut {hardNumberOfCorrectResponses * (numberOfPointsCanYouWin.value/3)} puncte la acest test!
+                                Ai obtinut {hardNumberOfCorrectResponses * (numberOfPointsCanYouWin.value / 3)} puncte
+                                la acest test!
                             </p>
                         </div>
                     }

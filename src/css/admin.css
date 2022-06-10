@@ -17,6 +17,10 @@ td {
     border: 1px solid #167bff;
 }
 
+.container{
+    margin-bottom: 20px;
+}
+
 #h2Title{
     text-align: center;
     font-size: 48px;
@@ -54,14 +58,124 @@ h1{
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 #addAdministratorChild{
     flex-basis: auto;
-    width: inherit;
+    width: 100%;
+}
+
+.divAddAdministrator{
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 #standard-required{
     display: flex;
     align-content: center;
+}
+
+[id^="questionResponses"]{
+    display: none;
+    width: 90%;
+    flex-direction: column;
+    align-items: center;
+}
+
+[id^="adminDetails"]{
+    display: none;
+    width: 90%;
+    flex-direction: column;
+    align-items: center;
+}
+
+[id^="hardResponses"]{
+    display: none;
+    width: 90%;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+.pendingQuestions{
+    width: 100%;
+}
+
+.pendingQuestionsRow{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.pendingQuestionsCell{
+    overflow-wrap: break-word;
+    border: 1.5px solid #0d6efd;
+    text-align: justify;
+    border-radius: 5px;
+    padding: 0.1rem;
+}
+
+.pendingAdminRequests{
+    width: 100%;
+}
+
+.pendingAdminsRow{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.pendingAdminsCell{
+    overflow-wrap: break-word;
+    border: 1px solid #1C8EF9;
+    text-align: justify;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.pendingResponses{
+    width: 100%;
+}
+
+.pendingResponsesRow{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.pendingResponsesCell{
+    overflow-wrap: break-word;
+    border: 1px solid #1C8EF9;
+    text-align: justify;
+    
+    border-radius: 5px;
+    padding: 0.1rem;
+}
+
+
+@media all and (max-width: 425px) {
+
+    #h2Title{
+        font-size: 25px;
+    }
+    
+    form{
+        width: 100%;
+    }
+
+    .pendingQuestionsCell{
+        font-size: 13px;
+    }
+
+    .pendingAdminsCell{
+        font-size: 13px;
+    }
+    
+    .pendingResponsesCell{
+        font-size: 13px;
+    }
+
 }

@@ -22,6 +22,7 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import {Input} from "@mui/icons-material";
 import TextField from "@mui/material/TextField";
 import diagram from "../images/structura_tabele.svg";
+import diagram_mobile from "../images/diagrama_tabele_telefon.svg";
 import PropTypes from "prop-types";
 
 export default function Training() {
@@ -840,6 +841,7 @@ export default function Training() {
 
     const handleEasyChange = e => {
         //e.preventDefault();
+        setIsClickOnSubmitForAddFeedback({value: "false"})
         setDisableFormControlForHelp({var1: false, var2: false, var3: false, var4: false})
         setErrorMessageForHelpQuestion({message: ""})
         setTextForImageButton({value: "Afișează diagrama bazei de date!"})
@@ -868,7 +870,7 @@ export default function Training() {
     }
     const handleMediumChange = e => {
         //e.preventDefault();
-
+        setIsClickOnSubmitForAddFeedback({value: "false"})
         setDisableFormControlForHelp({var1: false, var2: false, var3: false, var4: false})
         setErrorMessageForHelpQuestion({message: ""})
         setIsDisplayImage({value: "false"})
@@ -897,6 +899,7 @@ export default function Training() {
     }
     const handleHardChange = e => {
         //e.preventDefault();
+        setIsClickOnSubmitForAddFeedback({value: "false"})
         setSeconds(120);
         setDisableFormControlForHelp({var1: false, var2: false, var3: false, var4: false})
         setErrorMessageForHelpQuestion({message: ""})
@@ -939,12 +942,26 @@ export default function Training() {
                 div.appendChild(img);
                 //div.appendChild(img);
                 setIsImageCreate({value: "true"})
+                
+                let img2 = document.createElement("img");
+                img2.src = diagram_mobile;
+                let firstDiv2 = document.getElementById('diagramImage');
+                let divForImage2 = document.createElement('div');
+                divForImage2.id = "divForMobileImage";
+                firstDiv2.append(divForImage2);
+                let div2 = document.getElementById("divForMobileImage");
+                div2.appendChild(img2);
+                setIsImageCreate({value: "true"});
             }
         } else {
             setIsDisplayImage({value: "false"})
             if (isImageCreate.value === "true") {
                 let element = document.getElementById("divForImage");
                 element.remove();
+                setIsImageCreate({value: "false"})
+                
+                let element2 = document.getElementById("divForMobileImage");
+                element2.remove();
                 setIsImageCreate({value: "false"})
             }
             setTextForImageButton({value: "Afișează diagrama bazei de date!"})
@@ -1029,7 +1046,7 @@ export default function Training() {
             <div className="headContent">
                 <h2>Alege tipurile de intrebari pe care vrei să le primești!</h2>
                 <div className="topContent">
-                    <div>
+                    <div className="elemInTopContent">
                         <FormControlLabel
                             sx={{
                                 display: 'block',
@@ -1045,7 +1062,7 @@ export default function Training() {
                             label="Easy"
                         />
                     </div>
-                    <div>
+                    <div className="elemInTopContent">
                         <FormControlLabel
                             sx={{
                                 display: 'block',
@@ -1061,7 +1078,7 @@ export default function Training() {
                             label="Medium"
                         />
                     </div>
-                    <div>
+                    <div className="elemInTopContent">
                         <FormControlLabel
                             sx={{
                                 display: 'block',
@@ -1120,7 +1137,7 @@ export default function Training() {
                 <div>
                     <div className="itemCenterContent">
                         <p> {questionData.question} </p>
-                        <form onSubmit={handleSubmit}>
+                        <form style={{width: "auto"}} onSubmit={handleSubmit}>
                             <FormControl>
                                 {/*<FormLabel id="demo-radio-buttons-group-label">{questionData.question}</FormLabel>*/}
                                 <RadioGroup

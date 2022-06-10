@@ -14,12 +14,46 @@
     background-color: deepskyblue;
 }
 
+.normalNavigation{
+    overflow: hidden;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    list-style: none;
+    margin-left: auto;
+    margin-block-end: 0;
+    background-color: deepskyblue;
+}
+
+.mobileNavigation{
+    overflow: hidden;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    list-style: none;
+    margin-left: auto;
+    margin-block-end: 0;
+    background-color: deepskyblue;
+}
+
+.firstThreeElem{
+    display: flex;
+}
+
 #element{
     display: flex;
     justify-content: inherit;
     text-decoration: none;
 /*    display: block;*/
     padding: 1em;
+    color: white;
+}
+
+#mobileElement{
+    display: flex;
+    justify-content: inherit;
+    text-decoration: none;
+    /*    display: block;*/
     color: white;
 }
 
@@ -37,13 +71,67 @@
     }
 }*/
 
-@media all and (max-width: 600px) {
+.mobileMenu{
+    display: none;
+}
+
+
+.navigationMobileMenu{
+    display: none;
+}
+
+@media all and (max-width: 1024px) {
+    
+    .navigation{
+        justify-content: flex-start;
+    }
+    .normalNavigation{
+        display: none;
+    }
+    .mobileMenu{
+        display: flex;
+        width: 30%;
+        flex-direction: row-reverse;
+        margin-right: 0;
+        overflow: auto;
+    }
+    .firstThreeElem{
+        width: 70%;
+    }
+    .mobileNavigation{
+        flex-direction: column;
+        justify-content: flex-end;
+        width: 100%;
+        padding-left: 0;
+    }
+    
+    .dontShowOnMobile{
+        display: none !important;
+    }
+    
+    .navigationMobileMenu{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        width: 100%;
+    }
+    
+    #element{
+        width: 100%;
+        border-top: 1px solid #0dcaf0;
+    }
+    
+    
+    
+}
+
+@media all and (max-width: 425px) {
     .cont{
         margin-left: 0;
         margin-right: 0;
     }
     .navigation {
-        flex-flow: column wrap;
+        
         justify-content: center;
         padding: 0;
         margin: unset;
@@ -62,3 +150,4 @@
         border-bottom: none;
     }
 }
+

@@ -116,4 +116,37 @@ p{
     margin-top: 10px;
 }
 
+#divForMobileImage{
+    display: none;
+}
+
+
+@media all and (max-width: 425px) {
+
+    .elemInTopContent{
+        width: 100%;
+    }
+    
+    .elementInElements{
+        width: 100%;
+    }
+    
+    .elements{
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .elemJustifiedFeedback{
+        width: 100%;
+    }
+    
+    #divForImage{
+        display: none;
+    }
+    
+    #divForMobileImage{
+        display: flex;
+    }
+}
+
 

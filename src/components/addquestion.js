@@ -11,7 +11,8 @@ import {
     TextareaAutosize
 } from "@mui/material";
 import '../css/addquestion.css'
-import diagram from "../images/studentiDiagram.svg"
+import diagram from "../images/structura_tabele.svg"
+import diagram_mobile from "../images/diagrama_tabele_telefon.svg";
 
 export default function AddQuestion() {
 
@@ -31,6 +32,7 @@ export default function AddQuestion() {
     const [isDisplayImage, setIsDisplayImage] = useState({value: "false"})
     const [textForImageButton, setTextForImageButton] = useState({value: "Afișează diagrama tabelei!"})
     const [isImageCreate, setIsImageCreate] = useState({value: "false"});
+
     function decodeJWT() {
         if (localStorage.getItem("token")) {
             const data = {
@@ -129,8 +131,8 @@ export default function AddQuestion() {
     };
 
     function AddTrainingQuestion() {
-        
-        if(easy.value === "true" || medium.value === "true") {
+
+        if (easy.value === "true" || medium.value === "true") {
             const data = {
                 email: state.user,
                 username: username.username,
@@ -189,7 +191,7 @@ export default function AddQuestion() {
                     setEasy({value: "false"})
                     setMedium({value: "false"})
                 });
-        }else if(hard.value === "true"){
+        } else if (hard.value === "true") {
             const data = {
                 email: state.user,
                 username: username.username,
@@ -230,16 +232,6 @@ export default function AddQuestion() {
 
     const handleAddQuestionSubmit = e => {
         e.preventDefault();
-        /*console.log(addQuestion.question)
-        console.log(responsesData.var_1)
-        console.log(responsesData.var_2)
-        console.log(responsesData.var_3)
-        console.log(responsesData.var_4)
-        console.log(checked.var_1)
-        console.log(checked.var_2)
-        console.log(checked.var_3)
-        console.log(checked.var_4)
-        console.log(hard.value);*/
         if (easy.value === "true" || medium.value === "true") {
             if (!(addQuestion.question && responsesData.var_1 && responsesData.var_2 && responsesData.var_3 && responsesData.var_4)) {
                 console.log("exista variante goale")
@@ -263,13 +255,13 @@ export default function AddQuestion() {
         }
 
     }
-    
+
     const handleShowImage = e => {
         e.preventDefault();
-        if(isDisplayImage.value === "false"){
+        if (isDisplayImage.value === "false") {
             setIsDisplayImage({value: "true"})
-            setTextForImageButton({value: "Ascunde diagrama tabelei!"})
-            if(isImageCreate.value === "false") {
+            setTextForImageButton({value: "Ascunde diagrama bazei de date!"})
+            if (isImageCreate.value === "false") {
                 let img = document.createElement("img");
                 img.src = diagram;
                 let firstDiv = document.getElementById('diagramImage');
@@ -280,15 +272,29 @@ export default function AddQuestion() {
                 div.appendChild(img);
                 //div.appendChild(img);
                 setIsImageCreate({value: "true"})
+
+                let img2 = document.createElement("img");
+                img2.src = diagram_mobile;
+                let firstDiv2 = document.getElementById('diagramImage');
+                let divForImage2 = document.createElement('div');
+                divForImage2.id = "divForMobileImage";
+                firstDiv2.append(divForImage2);
+                let div2 = document.getElementById("divForMobileImage");
+                div2.appendChild(img2);
+                setIsImageCreate({value: "true"});
             }
-        }else{
+        } else {
             setIsDisplayImage({value: "false"})
-            if(isImageCreate.value === "true") {
+            if (isImageCreate.value === "true") {
                 let element = document.getElementById("divForImage");
                 element.remove();
                 setIsImageCreate({value: "false"})
+
+                let element2 = document.getElementById("divForMobileImage");
+                element2.remove();
+                setIsImageCreate({value: "false"})
             }
-            setTextForImageButton({value: "Afișează diagrama tabelei!"})
+            setTextForImageButton({value: "Afișează diagrama bazei de date!"})
         }
     }
 
@@ -359,21 +365,33 @@ export default function AddQuestion() {
             {easy.value === "true" &&
             <div className="centerContent">
                 <div className="itemCenterContent">
-                    <p>Trebuie să adaugi o întrebare teoretică ce va conține patru variante de răspuns (o variantă de răspuns corectă și trei variante de răspuns greșite). Trebuie să bifezi varianta de răspuns corectă. Toate câmpurile trebuiesc completate. Dacă sunt respectate cerințele, întrebarea ta va fi trimisă administratorilor, altfel vei primi un mesaj de eroare. Dacă întrebarea ta este acceptată, vei primi punctajul corespunzător!</p>
+                    <p>Trebuie să adaugi o întrebare teoretică ce va conține patru variante de răspuns (o variantă de
+                        răspuns corectă și trei variante de răspuns greșite). Trebuie să bifezi varianta de răspuns
+                        corectă. Toate câmpurile trebuiesc completate. Dacă sunt respectate cerințele, întrebarea ta va
+                        fi trimisă administratorilor, altfel vei primi un mesaj de eroare. Dacă întrebarea ta este
+                        acceptată, vei primi punctajul corespunzător!</p>
                 </div>
             </div>
             }
             {medium.value === "true" &&
             <div className="centerContent">
                 <div className="itemCenterContent">
-                    <p>Trebuie să adaugi o întrebare ce va avea ca variante de răspuns patru interogări, așa cum ai putut sesiza pe pagina de antrenament. Dintre cele patru variante de răspuns, una va conține interogarea corectă și celelalte trei vor conține interogări greșite, care să aibă legătura cu întrebarea. Trebuie să bifezi varianta de răspuns corectă. Toate câmpurile trebuiesc completate. Dacă sunt respectate cerințele, întrebarea ta va fi trimisă administratorilor, altfel vei primi un mesaj de eroare. Dacă întrebarea ta este acceptată, vei primi punctajul corespunzător!</p>
+                    <p>Trebuie să adaugi o întrebare ce va avea ca variante de răspuns patru interogări, așa cum ai
+                        putut sesiza pe pagina de antrenament. Dintre cele patru variante de răspuns, una va conține
+                        interogarea corectă și celelalte trei vor conține interogări greșite, care să aibă legătura cu
+                        întrebarea. Trebuie să bifezi varianta de răspuns corectă. Toate câmpurile trebuiesc completate.
+                        Dacă sunt respectate cerințele, întrebarea ta va fi trimisă administratorilor, altfel vei primi
+                        un mesaj de eroare. Dacă întrebarea ta este acceptată, vei primi punctajul corespunzător!</p>
                 </div>
             </div>
             }
             {hard.value === "true" &&
             <div className="centerContent">
                 <div className="itemCenterContent">
-                    <p>Trebuie să formulezi o întrebare de tip interogare care să poată fi rulată pe tabela studenti. Răspunsul corect al interogării îl vei scrie în câmpul special destinat. Dacă ai completat câmpurile, întrebarea ta va fi trimisă administratorilor spre verificare. Dacă întrebarea ta este acceptată, vei primi punctajul corespunzător!</p>
+                    <p>Trebuie să formulezi o întrebare de tip interogare care să poată fi rulată pe tabela studenti.
+                        Răspunsul corect al interogării îl vei scrie în câmpul special destinat. Dacă ai completat
+                        câmpurile, întrebarea ta va fi trimisă administratorilor spre verificare. Dacă întrebarea ta
+                        este acceptată, vei primi punctajul corespunzător!</p>
                 </div>
             </div>
             }
@@ -385,69 +403,80 @@ export default function AddQuestion() {
                     </div>
                 </form>
             </div>}
-            
+
             <div className="centerContent">
                 <div id="diagramImage">
-                    
+
                 </div>
             </div>
-            
+
             {(easy.value === "true" || medium.value === "true") &&
             <div className="centerContent">
                 <div className="itemCenterContent">
                     <form onSubmit={handleAddQuestionSubmit}>
                         <p id="questionTitle">Întrebarea ta</p>
                         <div id="childChangeDetails">
-                            <div>
-                                <TextareaAutosize
-                                    id="questionID"
-                                    aria-label="empty textarea"
-                                    placeholder="Write the question"
-                                    style={{width: 630}}
-                                    minRows={2}
-                                    onChange={e => addQuestion.question = e.target.value}
-                                />
+                            <div id="childChangeDetails">
+                                <div className="elemForVariants">
+                                    <TextareaAutosize
+                                        id="questionID"
+                                        aria-label="empty textarea"
+                                        placeholder="Scrie aici întrebarea"
+                                        style={{width: "50%"}}
+                                        minRows={2}
+                                        onChange={e => addQuestion.question = e.target.value}
+                                    />
+                                </div>
                                 <p id="questionTitle">Varianta 1</p>
-                                <FormControlLabel checked={checked.var_1} value="var_1" control={<Radio/>}
-                                                  onChange={handleChange}
-                                                  label={<TextareaAutosize
-                                                      id="idVar1"
-                                                      aria-label="empty textarea"
-                                                      placeholder="Write the answer"
-                                                      style={{width: 600}}
-                                                      onChange={e => responsesData.var_1 = e.target.value}
-                                                  />}/>
+                                <div className="elemForVariants">
+                                    <FormControlLabel checked={checked.var_1} value="var_1" control={<Radio/>}
+                                                      onChange={handleChange}
+                                                      label={<TextareaAutosize
+                                                          id="idVar1"
+                                                          aria-label="empty textarea"
+                                                          placeholder="Scrie aici răspunsul"
+                                                          style={{width: "100%"}}
+                                                          onChange={e => responsesData.var_1 = e.target.value}
+                                                      />}
 
+                                    />
+                                </div>
                                 <p id="questionTitle">Varianta 2</p>
-                                <FormControlLabel checked={checked.var_2} value="var_2" control={<Radio/>}
-                                                  onChange={handleChange}
-                                                  label={<TextareaAutosize
-                                                      id="idVar2"
-                                                      aria-label="empty textarea"
-                                                      placeholder="Write the answer"
-                                                      style={{width: 600}}
-                                                      onChange={e => responsesData.var_2 = e.target.value}
-                                                  />}/>
+                                <div className="elemForVariants">
+                                    <FormControlLabel checked={checked.var_2} value="var_2" control={<Radio/>}
+                                                      onChange={handleChange}
+                                                      label={<TextareaAutosize
+                                                          id="idVar2"
+                                                          aria-label="empty textarea"
+                                                          placeholder="Scrie aici răspunsul"
+                                                          style={{width: "100%"}}
+                                                          onChange={e => responsesData.var_2 = e.target.value}
+                                                      />}/>
+                                </div>
                                 <p id="questionTitle">Varianta 3</p>
-                                <FormControlLabel checked={checked.var_3} value="var_3" control={<Radio/>}
-                                                  onChange={handleChange}
-                                                  label={<TextareaAutosize
-                                                      id="idVar3"
-                                                      aria-label="empty textarea"
-                                                      placeholder="Write the answer"
-                                                      style={{width: 600}}
-                                                      onChange={e => responsesData.var_3 = e.target.value}
-                                                  />}/>
+                                <div className="elemForVariants">
+                                    <FormControlLabel checked={checked.var_3} value="var_3" control={<Radio/>}
+                                                      onChange={handleChange}
+                                                      label={<TextareaAutosize
+                                                          id="idVar3"
+                                                          aria-label="empty textarea"
+                                                          placeholder="Scrie aici răspunsul"
+                                                          style={{width: "100%"}}
+                                                          onChange={e => responsesData.var_3 = e.target.value}
+                                                      />}/>
+                                </div>
                                 <p id="questionTitle">Varianta 4</p>
-                                <FormControlLabel checked={checked.var_4} value="var_4" control={<Radio/>}
-                                                  onChange={handleChange}
-                                                  label={<TextareaAutosize
-                                                      id="idVar4"
-                                                      aria-label="empty textarea"
-                                                      placeholder="Write the answer"
-                                                      style={{width: 600}}
-                                                      onChange={e => responsesData.var_4 = e.target.value}
-                                                  />}/>
+                                <div className="elemForVariants">
+                                    <FormControlLabel checked={checked.var_4} value="var_4" control={<Radio/>}
+                                                      onChange={handleChange}
+                                                      label={<TextareaAutosize
+                                                          id="idVar4"
+                                                          aria-label="empty textarea"
+                                                          placeholder="Scrie aici răspunsul"
+                                                          style={{width: "100%"}}
+                                                          onChange={e => responsesData.var_4 = e.target.value}
+                                                      />}/>
+                                </div>
                                 <p id="questionTitle">Bifează varianta corectă!</p>
                             </div>
                             <div className="buttonLogin" id="childChangeDetails">
@@ -465,25 +494,29 @@ export default function AddQuestion() {
                 <div className="itemCenterContent">
                     <p id="questionTitle">Întrebarea ta</p>
                     <form onSubmit={handleAddQuestionSubmit}>
-                        <TextareaAutosize
-                            id="questionID"
-                            aria-label="empty textarea"
-                            placeholder="Write the question"
-                            style={{width: 600}}
-                            minRows={2}
-                            value={addQuestion.question}
-                            onChange={e => setAddQuestion({question: e.target.value})}
-                        />
+                        <div className="elemForVariants">
+                            <TextareaAutosize
+                                id="questionID"
+                                aria-label="empty textarea"
+                                placeholder="Write the question"
+                                style={{width: 600}}
+                                minRows={2}
+                                value={addQuestion.question}
+                                onChange={e => setAddQuestion({question: e.target.value})}
+                            />
+                        </div>
                         <p id="questionTitle">Răspunsul la întrebare</p>
-                        <TextareaAutosize
-                            id="responseID"
-                            aria-label="empty textarea"
-                            placeholder="Write the answer"
-                            style={{width: 600}}
-                            minRows={1}
-                            value={hardResponse.answer}
-                            onChange={e => setHardResponse({answer: e.target.value})}
-                        />
+                        <div className="elemForVariants">
+                            <TextareaAutosize
+                                id="responseID"
+                                aria-label="empty textarea"
+                                placeholder="Write the answer"
+                                style={{width: 600}}
+                                minRows={1}
+                                value={hardResponse.answer}
+                                onChange={e => setHardResponse({answer: e.target.value})}
+                            />
+                        </div>
                         <div className="buttonLogin" id="childChangeDetails">
                             <button className="btn btn-primary btn-block">Submit</button>
                         </div>
@@ -493,7 +526,7 @@ export default function AddQuestion() {
                     </form>
                 </div>
             </div>}
-            {isSuccessSubmit.value === "true" && 
+            {isSuccessSubmit.value === "true" &&
             <div>
                 <p>Întrebare adăugată cu succes!</p>
             </div>}

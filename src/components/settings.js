@@ -212,7 +212,7 @@ export default function Settings() {
     
     return (
         <div className="principalDiv">
-            <h2 id="h2Title">{username.username} Settings Page</h2>
+            <p id="pTitle">{username.username} Settings Page</p>
             <div className="formulary">
                 <div id="formularyChild">
                     <p >Your email</p>
@@ -250,7 +250,7 @@ export default function Settings() {
                     />
                 </div>
                 <div id="formularyChild">
-                    <form onSubmit={handleSubmitUsername}>
+                    <form style={{width: "auto"}} onSubmit={handleSubmitUsername}>
                         <p id="title">Username</p>
                         <div id="childChangeDetails">
                             <div>
@@ -271,7 +271,7 @@ export default function Settings() {
                     </form>
                 </div>
                 <div id="formularyChild">
-                    <form onSubmit={handleSubmitChangePassword}>
+                    <form style={{width: "auto"}} onSubmit={handleSubmitChangePassword}>
                         <p id="title">Change Password</p>
                         <div className="changePasswordClass">
                             <TextField
