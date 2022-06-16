@@ -1,0 +1,1 @@
+Partea de backend pentru SQL Game
