@@ -1,70 +1,89 @@
-# Getting Started with Create React App
+# SQL Game
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+SQL Game is an interactive web application designed to help users enhance their SQL skills through engaging challenges and practical exercises. Whether you're a beginner or an advanced user, SQL Game provides a structured learning experience with theoretical and practical questions.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **User Authentication:** Secure login and registration system for tracking progress.
+- **Interactive SQL Challenges:** Users can answer theoretical and practical SQL questions, earning points for correct answers.
+- **Difficulty Levels:** Three challenge levels - Easy, Medium, and Hard.
+- **Leaderboard & Statistics:** Track performance and compare scores with other users.
+- **Community-Driven Content:** Users can submit new questions for approval.
+- **Competitive Mode:** Challenge other users and place point-based wagers.
+- **Hints & Assistance:** Optional hints to help users answer difficult questions.
+- **Administrator Panel:** Manage user-generated questions and approve contributions.
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Backend:
+- **PHP** (for handling authentication, questions, and leaderboard management)
+- **MySQL** (relational database to store user progress and questions)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Frontend:
+- **ReactJS** (for an interactive user experience)
+- **Bootstrap** (for a responsive and modern UI)
 
-### `npm test`
+### Additional Tools:
+- **PHPMailer** (for email verification and password reset)
+- **Git** (version control and collaboration)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Setup Instructions
 
-### `npm run build`
+### Backend Setup:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Install **PHP** and **MySQL** on your system.
+2. Import the database schema into MySQL:
+   ```bash
+   mysql -u root -p < database.sql
+   ```
+3. Configure database credentials in `config.php`:
+   ```php
+   define('DB_HOST', 'localhost');
+   define('DB_USER', 'your_username');
+   define('DB_PASS', 'your_password');
+   define('DB_NAME', 'sql_game');
+   ```
+4. Start the backend server:
+   ```bash
+   php -S localhost:8000
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Frontend Setup:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the frontend application:
+   ```bash
+   npm start
+   ```
 
-### `npm run eject`
+## Future Development
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- ✅ **Real-time multiplayer SQL challenges**
+- ✅ **Integration with third-party SQL learning platforms**
+- ✅ **AI-generated SQL exercises for adaptive learning**
+- ✅ **Mobile version for on-the-go practice**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## About
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+SQL Game was developed as part of a **Bachelor's thesis** at **Alexandru Ioan Cuza University**, aiming to provide an **interactive and engaging way to practice SQL**. The project is designed for **students, professionals, and anyone interested in improving their database skills**.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## 🚀 Contributions
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Contributions are welcome! If you'd like to improve SQL Game, follow these steps:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. **Fork the repository**  
+2. **Create a new branch** (`git checkout -b feature-branch`)
+3. **Commit your changes** (`git commit -m "Added a new feature"`)
+4. **Push to GitHub** (`git push origin feature-branch`)
+5. **Create a Pull Request**
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Let's build SQL Game together! 🎯
